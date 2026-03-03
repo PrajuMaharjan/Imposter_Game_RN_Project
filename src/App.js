@@ -1,11 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {View,Text,Button,StyleSheet} from 'react-native';
+
+import Settings from './Settings';
+import GameSettings from './GameSettings';
+
+const Stack=createNativeStackNavigator();
+
 
 export default function App() {
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      /* Label  */
+      <Text style={styles.label}>Imposter Game</Text>
+
+      /* Buttons */
+
+      <View style={styles.button}>
+      <Button title="Play Game" onPress={()=>}/>
+
+      <Button title="Settings" onPress={()=>}/>
+      </View>
     </View>
   );
 }
@@ -13,8 +30,11 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignContent:'center',
+    padding:20,
   },
+  button:{
+    gap:10,
+  }
 });
