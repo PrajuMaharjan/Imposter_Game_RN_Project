@@ -3,8 +3,7 @@ import {View,Text,Button,StyleSheet} from 'react-native';
 export default function HomeScreen({navigation}){
 return (
     <View style={styles.container}>
-      <Text style={styles.label}>Imposter Game</Text>
-
+      <Text style={styles.title}>Imposter Game</Text>
 
       <View style={styles.button}>
       <Button title="Play Game" onPress={()=>navigation.navigate('GameSettings')}/>
@@ -18,13 +17,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignContent:'center',
+    alignItems:'center',
+    backgroundColor:'#fff',
     padding:20,
   },
   button:{
-    gap:10,
+    gap:12,
+    width:'100%',
   },
-label:{
-    fontSize:24
+title:{
+    fontSize:32,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 40,
+    letterSpacing: 1,
 },
 });
