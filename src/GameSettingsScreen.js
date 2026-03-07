@@ -8,13 +8,19 @@ export default function GameSettings({navigation}){
 
     const handleStart=()=>{
         if(gameMode==='Word'){
-            navigation.navigate('GenreSelect_1');
+            navigation.navigate('Select Genre');
         }else{   
-            navigation.navigate('GenreSelect_2');
+            navigation.navigate('Select Genre-2');
         }
     }
     return(
 <ImageBackground source={require('../assets/HomeImage.png')} style={styles.background} resizeMode="cover">
+    
+    {/* Back button*/}
+    <TouchableOpacity style={styles.backButton} onPress={()=>navigation.goBack()}>
+        <Text style={styles.backArrow}>←</Text>
+    </TouchableOpacity>
+
     <View style={styles.container}>
         <Text style={styles.heading}>Game Settings</Text>
       {/* Number of Players and Imposters Section*/}
@@ -79,6 +85,18 @@ const styles = StyleSheet.create({
   background:{
     flex:1,
   },
+  backButton:{
+    position:'absolute',
+    top:50,
+    left:20,
+    zIndex:10,
+    padding:8,
+  },  
+  backArrow:{
+    fontSize:28,
+    color:'white',
+    fontWeight:'bold',
+  },
   container: {
     flex: 1,
     paddingTop:40,
@@ -89,6 +107,7 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
     color:'white',
     marginBottom:30,
+    marginTop:100,
     textAlign:'center',
   },
 
@@ -106,7 +125,7 @@ const styles = StyleSheet.create({
     alignItems:'center',
   },
   boxLabel:{
-    fontSize:143,
+    fontSize:11,
     fontWeight:'bold',
     color:'white',
     marginBottom:12,
@@ -131,6 +150,55 @@ const styles = StyleSheet.create({
   },
   counterButtonText:{
     color:'white',
-    fontSize:
-  }
+    fontSize:20,
+    fontWeight:'bold',
+  },
+  counterValue:{
+    fontSize:22,
+    fontWeight:'bold',
+    color:'white',
+    minWidth:36,
+    textAlign:'center',
+  },
+  modeBox:{
+    flex:1,
+    backgroundColor:'rgba(255,255,255,0.2)',
+    borderRadius:12,
+    padding:16,alignItems:'center',
+    borderWidth:2,
+    borderColor:'transparent',
+  },
+  modeBoxActive:{
+    borderColor:'white',
+    backgroundColor:'rgba(255,255,255,0.4)',
+  },
+  modeText:{
+    fontSize:15,
+    fontWeight:'bold',
+    color:'rgba(255,255,255,0.7)',
+    marginBottom:4,
+  },
+  modeTextActive:{
+    color:'white',
+  },
+  modeDescription:{
+    fontSize:11,
+    color:'rgba(255,255,255,0.7)',
+    textAlign:'center',
+  },
+  startButton:{
+    backgroundColor:'rgba(255,255,255,0.3)',
+    paddingVertical:16,
+    borderRadius:12,
+    alignItems:'center',
+    marginTop:10,
+    borderWidth:2,
+    borderColor:'white',
+  },
+  startButtonText:{
+    color:'white',
+    fontSIze:18,
+    fontWeight:'bold',
+    letterSpacing:1,
+  },
 });

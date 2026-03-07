@@ -1,5 +1,6 @@
 import {NavigationContainer} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { ImageBackground } from 'react-native';
 
 /* Import each screen*/
 import HomeScreen from './HomeScreen';
@@ -26,10 +27,12 @@ const Stack=createNativeStackNavigator();
 
 export default function App() {
 return(
+<ImageBackground source={require('../assets/HomeImage.png')} style={{flex:1}} resizeMode='cover'>
   <NavigationContainer>
-  <Stack.Navigator initialRouteName="Home"> 
+  <Stack.Navigator initialRouteName="Home" screenOptions={{contentStyle:{backgroundColor:'black'},}}>
+
   <Stack.Screen name='Home' component={HomeScreen} options={{headerShown:false}}/>
-  <Stack.Screen name='GameSettings' component={GameSettings}/>
+  <Stack.Screen name='GameSettings' component={GameSettings} options={{headerShown:false}}/>
   <Stack.Screen name='Settings' component={Settings} />
 
   <Stack.Screen name='Discussion' component={Discussion_1} />
@@ -48,5 +51,6 @@ return(
 
   </Stack.Navigator>
   </NavigationContainer>
+  </ImageBackground>
 );
 }
