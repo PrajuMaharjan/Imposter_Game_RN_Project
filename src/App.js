@@ -39,12 +39,12 @@ return(
   <Stack.Screen name='Vote' component={Voting_1} />
   <Stack.Screen name='Results' component={Results_1} />
 
-  <Stack.Screen name='Discussion' component={Discussion_2} />
-  <Stack.Screen name='Select Genre' component={GenreSelect_2} />
-  <Stack.Screen name='Names' component={PlayerEntry_2} />
-  <Stack.Screen name='Roles' component={RoleReveal_2} />
-  <Stack.Screen name='Vote' component={Voting_2} />
-  <Stack.Screen name='Results' component={Results_2} />
+  <Stack.Screen name='Discussion-2' component={Discussion_2} />
+  <Stack.Screen name='Select Genre-2' component={GenreSelect_2} />
+  <Stack.Screen name='Names-2' component={PlayerEntry_2} />
+  <Stack.Screen name='Roles-2' component={RoleReveal_2} />
+  <Stack.Screen name='Vote-2' component={Voting_2} />
+  <Stack.Screen name='Results-2' component={Results_2} />
 
   </Stack.Navigator>
   </NavigationContainer>

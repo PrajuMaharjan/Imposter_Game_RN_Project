@@ -3,7 +3,7 @@ import {View,Text,Button,StyleSheet} from 'react-native';
 export default function GenreSelect({navigation}){
     return(
         <View style={styles.container}>
-            <Text style={styles.title}>Select Genres</Text>
+            <Text style={styles.title}>Select Genres_1</Text>
         </View>
     );
 }
