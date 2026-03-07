@@ -7,12 +7,20 @@ import Settings from './SettingsScreen';
 import GameSettings from './GameSettingsScreen';
 
 /* Word Game Screens*/
-import Discussion from './WordGame/DiscussionScreen';
-import GenreSelect from './WordGame/GenreSelectScreen';
-import PlayerEntry from './WordGame/PlayerNamesScreen';
-import RoleReveal from './WordGame/RoleRevealScreen';
-import Voting from './WordGame/VotingScreen';
-import Results from './WordGame/ResultsScreen';
+import Discussion_1 from './WordGame/DiscussionScreen';
+import GenreSelect_1 from './WordGame/GenreSelectScreen';
+import PlayerEntry_1 from './WordGame/PlayerNamesScreen';
+import RoleReveal_1 from './WordGame/RoleRevealScreen';
+import Voting_1 from './WordGame/VotingScreen';
+import Results_1 from './WordGame/ResultsScreen';
+
+/* Question Game Screens*/
+import Discussion_2 from './QuestionGame/DiscussionScreen';
+import GenreSelect_2 from './QuestionGame/GenreSelectScreen';
+import PlayerEntry_2 from './QuestionGame/PlayerNamesScreen';
+import RoleReveal_2 from './QuestionGame/RoleRevealScreen';
+import Voting_2 from './QuestionGame/VotingScreen';
+import Results_2 from './QuestionGame/ResultsScreen';
 
 const Stack=createNativeStackNavigator();
 
@@ -21,15 +29,22 @@ return(
   <NavigationContainer>
   <Stack.Navigator initialRouteName="Home"> 
   <Stack.Screen name='Home' component={HomeScreen} options={{headerShown:false}}/>
-  <Stack.Screen name='GameSettings' component={GameSettings} options={{headerTitle:''}}/>
+  <Stack.Screen name='GameSettings' component={GameSettings}/>
   <Stack.Screen name='Settings' component={Settings} />
 
-  <Stack.Screen name='Discussion' component={Discussion} />
-  <Stack.Screen name='Select Genre' component={GenreSelect} />
-  <Stack.Screen name='Names' component={PlayerEntry} />
-  <Stack.Screen name='Roles' component={RoleReveal} />
-  <Stack.Screen name='Vote' component={Voting} />
-  <Stack.Screen name='Results' component={Results} />
+  <Stack.Screen name='Discussion' component={Discussion_1} />
+  <Stack.Screen name='Select Genre' component={GenreSelect_1} />
+  <Stack.Screen name='Names' component={PlayerEntry_1} />
+  <Stack.Screen name='Roles' component={RoleReveal_1} />
+  <Stack.Screen name='Vote' component={Voting_1} />
+  <Stack.Screen name='Results' component={Results_1} />
+
+  <Stack.Screen name='Discussion' component={Discussion_2} />
+  <Stack.Screen name='Select Genre' component={GenreSelect_2} />
+  <Stack.Screen name='Names' component={PlayerEntry_2} />
+  <Stack.Screen name='Roles' component={RoleReveal_2} />
+  <Stack.Screen name='Vote' component={Voting_2} />
+  <Stack.Screen name='Results' component={Results_2} />
 
   </Stack.Navigator>
   </NavigationContainer>
