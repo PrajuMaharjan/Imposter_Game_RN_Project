@@ -2,6 +2,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { ImageBackground } from 'react-native';
 
+/* Import Game Context */
+import { GameProvider } from './GameContext';
+
 /* Import each screen*/
 import HomeScreen from './HomeScreen';
 import Settings from './SettingsScreen';
@@ -28,6 +31,7 @@ const Stack=createNativeStackNavigator();
 export default function App() {
 return(
 <ImageBackground source={require('../assets/HomeImage.png')} style={{flex:1}} resizeMode='cover'>
+  <GameProvider>
   <NavigationContainer>
   <Stack.Navigator initialRouteName="Home" screenOptions={{contentStyle:{backgroundColor:'black'},}}>
 
@@ -36,7 +40,7 @@ return(
   <Stack.Screen name='Settings' component={Settings} />
 
   <Stack.Screen name='Discussion' component={Discussion_1} />
-  <Stack.Screen name='Select Genre' component={GenreSelect_1} />
+  <Stack.Screen name='Select Genre' component={GenreSelect_1} options={{headerShown:false}} />
   <Stack.Screen name='Names' component={PlayerEntry_1} />
   <Stack.Screen name='Roles' component={RoleReveal_1} />
   <Stack.Screen name='Vote' component={Voting_1} />
@@ -51,6 +55,7 @@ return(
 
   </Stack.Navigator>
   </NavigationContainer>
+  </GameProvider>
   </ImageBackground>
 );
 }

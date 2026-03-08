@@ -1,25 +1,203 @@
-import {View,Text,Button,StyleSheet} from 'react-native';
+import {View,Text,StyleSheet,ImageBackground,TouchableOpacity,ScrollView,Alert} from 'react-native';
+import {useState} from 'react';
+import {useGame} from '../GameContext';
+
+const genres=[
+    {id:'animals',label:'Animals',emoji:'🐾'},
+    {id:'fruit',label:'Fruit',emoji:'🍓'},
+    {id:'food',label:'Food',emoji:'🍕'},
+    {id:'objects',label:'Objects',emoji:'📦'},
+    {id:'famous_people',label:'Famous People',emoji:'🌟'},
+    {id:'cities',label:'Cities',emoji:'🏙️'},
+    {id:'countries',label:'Countries',emoji:'🌍'},
+    {id:'health',label:'Health',emoji:'❤️'},
+    {id:'brands',label:'Brands',emoji:'🏷️'},
+    {id:'games',label:'Games',emoji:'🎮'},
+    {id:'movies',label:'Movies',emoji:'🎬'},
+    {id:'sports',label:'Sports',emoji:'⚽'},
+    {id:'professions',label:'Professions',emoji:'💼'},
+];
 
 export default function GenreSelect({navigation}){
+    const {gameState,setGameState}=useGame();
+    const [selected,setSelected]=useStaete([]);
+
+    const toggleGenre=(id)=>{
+        
+    }
+
     return(
-        <View style={styles.container}>
-            <Text style={styles.title}>Select Genres_1</Text>
+<ImageBackground source={require('../../assets/HomeImage.png')} style={styles.background} resizeMode="cover">
+    
+    {/* Back button*/}
+    <TouchableOpacity style={styles.backButton} onPress={()=>navigation.goBack()}>
+        <Text style={styles.backArrow}>←</Text>
+    </TouchableOpacity>
+
+    <View style={styles.container}>
+        <Text style={styles.heading}>Select Genres</Text>
+      {/* Two Genres in each row*/}
+      <View style={styles.row}>
+
+        {/* Players box*/}
+        <View style={styles.box}>
+            <Text style={styles.emoji}>👥</Text>
+            <Text style={styles.boxLabel}>How many players?</Text>
+            <View style={styles.counter}>
+                <TouchableOpacity style={styles.counterButton} onPress={()=>setPlayers(p=>Math.max(2,p-1))}>
+                    <Text style={styles.counterButtonText}>-</Text>
+                </TouchableOpacity>
+                <Text style={styles.counterValue}>{players}</Text>
+                <TouchableOpacity style={styles.counterButton} onPress={()=>setPlayers(p=>Math.min(20,p+1))}>
+                    <Text style={styles.counterButtonText}>+</Text>        
+                </TouchableOpacity>
+            </View>
         </View>
+
+        {/* Imposters box*/} 
+        <View style={styles.box}>
+            <Text style={styles.emoji}>🔪</Text>
+            <Text style={styles.boxLabel}>How many imposters?</Text>
+            <View style={styles.counter}>
+                <TouchableOpacity style={styles.counterButton} onPress={()=>setImposters(i=>Math.max(1,i-1))}>
+                    <Text style={styles.counterButtonText}>-</Text>
+                </TouchableOpacity>
+                <Text style={styles.counterValue}>{imposters}</Text>
+                <TouchableOpacity style={styles.counterButton} onPress={()=>setImposters(i=>Math.min(players-1,i+1))}>
+                    <Text style={styles.counterButtonText}>+</Text>        
+                </TouchableOpacity>
+            </View>
+        </View>
+        </View>
+
+
+        {/* Start game button*/}
+        <TouchableOpacity style={styles.startButton} onPress={handleStart}>
+            <Text style={styles.startButtonText}>START GAME</Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
     );
 }
 
-const styles=StyleSheet.create({
-    container:{
-        flex:1,
-        justifyContent:'center',
-        alignItems:'center',
-        backgroundColor:'white',
-    },
-    title:{
-        fontSize:24,
-        fontWeight:'bold',
-        color:'black',
-        justifyContent:'center',
-        alignItems:'center',
-    },
+const styles = StyleSheet.create({
+  background:{
+    flex:1,
+  },
+  backButton:{
+    position:'absolute',
+    top:50,
+    left:20,
+    zIndex:10,
+    padding:8,
+  },  
+  backArrow:{
+    fontSize:28,
+    color:'white',
+    fontWeight:'bold',
+  },
+  container: {
+    flex: 1,
+    paddingTop:40,
+    padding:20,
+  },
+  heading:{
+    fontSize:28,
+    fontWeight:'bold',
+    color:'white',
+    marginBottom:30,
+    marginTop:100,
+    textAlign:'center',
+  },
+
+  row:{
+    flexDirection:'row',
+    gap:12,
+    marginBottom:16,
+  },
+
+  box:{
+    flex:1,
+    backgroundColor:'rgba(255,255,255,0.2)',
+    borderRadius:12,
+    padding:16,
+    alignItems:'center',
+  },
+  boxLabel:{
+    fontSize:11,
+    fontWeight:'bold',
+    color:'white',
+    marginBottom:12,
+    textAlign:'center',
+  },
+  emoji:{
+    fontSize:30,
+    marginBottom:6,
+  },
+  counter:{
+    flexDirection:'row',
+    alignItems:'center',
+    gap:16,
+  },
+  counterButton:{
+    backgroundColor:'rgba(255,255,255,0.3)',
+    width:32,
+    height:32,
+    borderRadius:8,
+    alignItems:'center',
+    justifyContent:'center',
+  },
+  counterButtonText:{
+    color:'white',
+    fontSize:20,
+    fontWeight:'bold',
+  },
+  counterValue:{
+    fontSize:22,
+    fontWeight:'bold',
+    color:'white',
+    minWidth:36,
+    textAlign:'center',
+  },
+  modeBox:{
+    flex:1,
+    backgroundColor:'rgba(255,255,255,0.2)',
+    borderRadius:12,
+    padding:16,alignItems:'center',
+    borderWidth:2,
+    borderColor:'transparent',
+  },
+  modeBoxActive:{
+    borderColor:'white',
+    backgroundColor:'rgba(255,255,255,0.4)',
+  },
+  modeText:{
+    fontSize:15,
+    fontWeight:'bold',
+    color:'rgba(255,255,255,0.7)',
+    marginBottom:4,
+  },
+  modeTextActive:{
+    color:'white',
+  },
+  modeDescription:{
+    fontSize:11,
+    color:'rgba(255,255,255,0.7)',
+    textAlign:'center',
+  },
+  startButton:{
+    backgroundColor:'rgba(255,255,255,0.3)',
+    paddingVertical:16,
+    borderRadius:12,
+    alignItems:'center',
+    marginTop:10,
+    borderWidth:2,
+    borderColor:'white',
+  },
+  startButtonText:{
+    color:'white',
+    fontSIze:18,
+    fontWeight:'bold',
+    letterSpacing:1,
+  },
 });

@@ -74,7 +74,7 @@ export default function GameSettings({navigation}){
 
         {/* Start game button*/}
         <TouchableOpacity style={styles.startButton} onPress={handleStart}>
-            <Text style={styles.startButtonText}>START GAME</Text>
+            <Text style={styles.startButtonText}>NEXT</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
