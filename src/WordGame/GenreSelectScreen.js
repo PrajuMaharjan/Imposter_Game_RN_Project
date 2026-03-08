@@ -20,10 +20,24 @@ const genres=[
 
 export default function GenreSelect({navigation}){
     const {gameState,setGameState}=useGame();
-    const [selected,setSelected]=useStaete([]);
+    const [selected,setSelected]=useState(genres.map(g=>g.id));
 
     const toggleGenre=(id)=>{
-        
+        setSelected(prev=>prev.includes(id)?prev.filter(g=>g!==id):[...prev,id]);
+    };
+
+    const handleNext=()=>{
+        if(selected.length===0){
+            Alert.alert('No genre selected.','Please select at least one genre to continue');
+            return;
+        }
+    setGameState(prev=>({...prev,genre:selected}));
+    navigation.navigate('Names');
+    };
+
+    const rows=[];
+    for(let i=0;i<genres.length;i+=2){
+        rows.push(genres.slice(i,i+2));
     }
 
     return(
@@ -36,46 +50,28 @@ export default function GenreSelect({navigation}){
 
     <View style={styles.container}>
         <Text style={styles.heading}>Select Genres</Text>
-      {/* Two Genres in each row*/}
-      <View style={styles.row}>
+        
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+            {rows.map((row,rowIndex)=>(
+                <View key={rowIndex} style={styles.row}>
+                    {row.map(genre=>{
+                        const isSelected=selected.includes(genre.id);
+                        return(
+                            <TouchableOpacity key={genre.id} style={[styles.box ,isSelected && styles.boxSelected]} onPress={()=>toggleGenre(genre.id)}>
+                                <Text style={styles.emoji}>{genre.emoji}</Text>
+                                <Text style={[styles.boxLabel,isSelected && styles.boxLabelSelected]}>{genre.label}</Text>
+                            </TouchableOpacity>
+                                );
+                        })}
+                </View>
+            ))}
+        </ScrollView>
 
-        {/* Players box*/}
-        <View style={styles.box}>
-            <Text style={styles.emoji}>👥</Text>
-            <Text style={styles.boxLabel}>How many players?</Text>
-            <View style={styles.counter}>
-                <TouchableOpacity style={styles.counterButton} onPress={()=>setPlayers(p=>Math.max(2,p-1))}>
-                    <Text style={styles.counterButtonText}>-</Text>
-                </TouchableOpacity>
-                <Text style={styles.counterValue}>{players}</Text>
-                <TouchableOpacity style={styles.counterButton} onPress={()=>setPlayers(p=>Math.min(20,p+1))}>
-                    <Text style={styles.counterButtonText}>+</Text>        
-                </TouchableOpacity>
-            </View>
-        </View>
-
-        {/* Imposters box*/} 
-        <View style={styles.box}>
-            <Text style={styles.emoji}>🔪</Text>
-            <Text style={styles.boxLabel}>How many imposters?</Text>
-            <View style={styles.counter}>
-                <TouchableOpacity style={styles.counterButton} onPress={()=>setImposters(i=>Math.max(1,i-1))}>
-                    <Text style={styles.counterButtonText}>-</Text>
-                </TouchableOpacity>
-                <Text style={styles.counterValue}>{imposters}</Text>
-                <TouchableOpacity style={styles.counterButton} onPress={()=>setImposters(i=>Math.min(players-1,i+1))}>
-                    <Text style={styles.counterButtonText}>+</Text>        
-                </TouchableOpacity>
-            </View>
-        </View>
-        </View>
-
-
-        {/* Start game button*/}
-        <TouchableOpacity style={styles.startButton} onPress={handleStart}>
-            <Text style={styles.startButtonText}>START GAME</Text>
+            {/* Start game button*/}
+        <TouchableOpacity style={[styles.startButton,selected.length===0 && styles.startButtonDisabled]} onPress={handleNext}>
+            <Text style={styles.startButtonText}>NEXT</Text>
         </TouchableOpacity>
-      </View>
+    </View>
     </ImageBackground>
     );
 }
@@ -115,13 +111,17 @@ const styles = StyleSheet.create({
     gap:12,
     marginBottom:16,
   },
-
+  scrollContent:{
+    paddingBottom:20,
+  },
   box:{
     flex:1,
     backgroundColor:'rgba(255,255,255,0.2)',
     borderRadius:12,
     padding:16,
     alignItems:'center',
+    borderWidth:2,
+    borderColor:'transparent',
   },
   boxLabel:{
     fontSize:11,
@@ -130,60 +130,16 @@ const styles = StyleSheet.create({
     marginBottom:12,
     textAlign:'center',
   },
+  boxLabelSelected:{
+    color:'white',
+  },
+  boxSelected:{
+    backgroundColor:'rgba(255,255,255,0.35)',
+    borderColor:'green',
+  },
   emoji:{
     fontSize:30,
     marginBottom:6,
-  },
-  counter:{
-    flexDirection:'row',
-    alignItems:'center',
-    gap:16,
-  },
-  counterButton:{
-    backgroundColor:'rgba(255,255,255,0.3)',
-    width:32,
-    height:32,
-    borderRadius:8,
-    alignItems:'center',
-    justifyContent:'center',
-  },
-  counterButtonText:{
-    color:'white',
-    fontSize:20,
-    fontWeight:'bold',
-  },
-  counterValue:{
-    fontSize:22,
-    fontWeight:'bold',
-    color:'white',
-    minWidth:36,
-    textAlign:'center',
-  },
-  modeBox:{
-    flex:1,
-    backgroundColor:'rgba(255,255,255,0.2)',
-    borderRadius:12,
-    padding:16,alignItems:'center',
-    borderWidth:2,
-    borderColor:'transparent',
-  },
-  modeBoxActive:{
-    borderColor:'white',
-    backgroundColor:'rgba(255,255,255,0.4)',
-  },
-  modeText:{
-    fontSize:15,
-    fontWeight:'bold',
-    color:'rgba(255,255,255,0.7)',
-    marginBottom:4,
-  },
-  modeTextActive:{
-    color:'white',
-  },
-  modeDescription:{
-    fontSize:11,
-    color:'rgba(255,255,255,0.7)',
-    textAlign:'center',
   },
   startButton:{
     backgroundColor:'rgba(255,255,255,0.3)',
@@ -196,8 +152,12 @@ const styles = StyleSheet.create({
   },
   startButtonText:{
     color:'white',
-    fontSIze:18,
+    fontSize:18,
     fontWeight:'bold',
     letterSpacing:1,
+  },
+  startButtonDisabled:{
+    borderColor:'rgba(255,255,255,0.3)',
+    backgroundColor:'rgba(255,255,255,0.1)',
   },
 });
