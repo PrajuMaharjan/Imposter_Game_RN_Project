@@ -31,7 +31,7 @@ export default function GameSettings({navigation}){
             <Text style={styles.emoji}>👥</Text>
             <Text style={styles.boxLabel}>How many players?</Text>
             <View style={styles.counter}>
-                <TouchableOpacity style={styles.counterButton} onPress={()=>setPlayers(p=>Math.max(2,p-1))}>
+                <TouchableOpacity style={styles.counterButton} onPress={()=>setPlayers(p=>Math.max(3,p-1))}>
                     <Text style={styles.counterButtonText}>-</Text>
                 </TouchableOpacity>
                 <Text style={styles.counterValue}>{players}</Text>
@@ -50,7 +50,7 @@ export default function GameSettings({navigation}){
                     <Text style={styles.counterButtonText}>-</Text>
                 </TouchableOpacity>
                 <Text style={styles.counterValue}>{imposters}</Text>
-                <TouchableOpacity style={styles.counterButton} onPress={()=>setImposters(i=>Math.min(players-1,i+1))}>
+                <TouchableOpacity style={styles.counterButton} onPress={()=>setImposters(i=>Math.min(players-2,i+1))}>
                     <Text style={styles.counterButtonText}>+</Text>        
                 </TouchableOpacity>
             </View>
