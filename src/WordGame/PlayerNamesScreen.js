@@ -45,10 +45,31 @@ export default function EnterNames({navigation}){
     };
 
     return(
+<ImageBackground source={require('../../assets/HomeImage.png')} style={styles.background} resizeMode="cover">
+    
+    {/* Back button*/}
+    <TouchableOpacity style={styles.backButton} onPress={()=>navigation.goBack()}>
+        <Text style={styles.backArrow}>←</Text>
+    </TouchableOpacity>
 
-        <View style={styles.container}>
-            <Text style={styles.title}>Names</Text>
-        </View>
+    {/* <View style={styles.container}>
+        <Text style={styles.heading}>Player List</Text>
+        <View style={styles.countersRow}>
+            <View style={styles.counterBox}></View>
+        </View> */}
+        
+
+
+
+
+        
+
+            {/* Start game button*/}
+        <TouchableOpacity style={[styles.startButton,selected.length===0 && styles.startButtonDisabled]} onPress={handleNext}>
+            <Text style={styles.startButtonText}>NEXT</Text>
+        </TouchableOpacity>
+    </View>
+    </ImageBackground>
     );
 }
 
