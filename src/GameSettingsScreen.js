@@ -1,12 +1,20 @@
 import {View,Text,StyleSheet,ImageBackground,TouchableOpacity,Switch} from 'react-native';
 import {useState} from 'react';
+import {useGame} from './GameContext';
 
 export default function GameSettings({navigation}){
     const [players,setPlayers]=useState(4);
-    const [imposters,setImposters]=useState(4);
+    const [imposters,setImposters]=useState(1);
     const [gameMode,setGameMode]=useState('Word');
+    const {setGameState}=useGame();
 
     const handleStart=()=>{
+      setGameState(prev=>({
+        ...prev,
+        players:players,
+        imposters:imposters,
+        gameMode:gameMode,
+      }));
         if(gameMode==='Word'){
             navigation.navigate('Select Genre');
         }else{   
@@ -197,7 +205,7 @@ const styles = StyleSheet.create({
   },
   startButtonText:{
     color:'white',
-    fontSIze:18,
+    fontSize:18,
     fontWeight:'bold',
     letterSpacing:1,
   },

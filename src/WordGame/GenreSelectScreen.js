@@ -144,9 +144,10 @@ const styles = StyleSheet.create({
   startButton:{
     backgroundColor:'rgba(255,255,255,0.3)',
     paddingVertical:16,
-    borderRadius:12,
+    borderRadius:8,
     alignItems:'center',
     marginTop:10,
+    marginBottom:50,
     borderWidth:2,
     borderColor:'white',
   },
