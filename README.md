@@ -1,1 +1,2 @@
-# Learning_React_Native
+Next To Do:
+Updated gameSettings and Abstract Category
