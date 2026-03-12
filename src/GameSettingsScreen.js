@@ -102,7 +102,7 @@ export default function GameSettings({navigation}){
                 <View style={styles.toggleInfo}>
                   <Text style={styles.toggleLabel}>Show Hints For Imposter?</Text>
                 </View>
-                <Switch value={hintsForImposter} onValueChange={setHintsForImposter} trackColor={{false:'rgba(255,255,255,0.2)',true:'rgba(255,255,255,0.8)'}} thumbColor={'white'}/>
+                <Switch value={hintsForImposter} onValueChange={setHintsForImposter} trackColor={{false:'rgba(255,255,255,0.2)',true:'#2196F3'}} thumbColor={'white'}/>
                 </View>
                 <View style={styles.divider}/>
 
@@ -111,7 +111,7 @@ export default function GameSettings({navigation}){
                 <View style={styles.toggleInfo}>
                   <Text style={styles.toggleLabel}>Show Genre To Imposter?</Text>
                 </View>
-                <Switch value={showGenreToImposter} onValueChange={setshowGenreToImposter} trackColor={{false:'rgba(255,255,255,0.2)',true:'rgba(255,255,255,0.8)'}} thumbColor={'white'}/>
+                <Switch value={showGenreToImposter} onValueChange={setshowGenreToImposter} trackColor={{false:'rgba(255,255,255,0.2)',true:'#2196F3'}} thumbColor={'white'}/>
                 </View>
                 <View style={styles.divider}/>
                 {/*Toggle for No Imposter Mode*/}
@@ -119,7 +119,7 @@ export default function GameSettings({navigation}){
                 <View style={styles.toggleInfo}>
                   <Text style={styles.toggleLabel}>No Imposter Mode</Text>
                 </View>
-                <Switch value={noImposterMode} onValueChange={setnoImposterMode} trackColor={{false:'rgba(255,255,255,0.2)',true:'rgba(255,255,255,0.8)'}} thumbColor={'white'}/>
+                <Switch value={noImposterMode} onValueChange={setnoImposterMode} trackColor={{false:'rgba(255,255,255,0.2)',true:'#2196F3'}} thumbColor={'white'}/>
                 </View>
                 </>
             ):(
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
     color:'white',
     marginBottom:30,
-    marginTop:100,
+    marginTop:50,
     textAlign:'center',
   },
 
@@ -288,7 +288,8 @@ const styles = StyleSheet.create({
     color:'rgba(255,255,255,0.5)',
     fontSize:13,
     textAlign:'center',
-    paddingVertical:8
+    paddingVertical:8,
+    color:'white',
   },
   startButton:{
     backgroundColor:'rgba(255,255,255,0.3)',
@@ -296,6 +297,7 @@ const styles = StyleSheet.create({
     borderRadius:12,
     alignItems:'center',
     marginTop:10,
+    marginBottom:50,
     borderWidth:2,
     borderColor:'white',
   },
