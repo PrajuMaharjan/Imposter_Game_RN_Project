@@ -6,6 +6,11 @@ export default function GameSettings({navigation}){
     const [players,setPlayers]=useState(4);
     const [imposters,setImposters]=useState(1);
     const [gameMode,setGameMode]=useState('Word');
+    const [advancedOpen,setAdvancedOpen]=useState(false);
+    const [hintsForImposter,setHintsForImposter]=useState(false);
+    const [noImposterMode,setnoImposterMode]=useState(false);
+    const [showGenreToImposter,setshowImpostettoImposter]=useState(false);
+    const [noImposterMode,setnoImposterMode]=useState(false);
     const {setGameState}=useGame();
 
     const handleStart=()=>{
@@ -14,6 +19,9 @@ export default function GameSettings({navigation}){
         players:players,
         imposters:imposters,
         gameMode:gameMode,
+        hintsForImposter:hintsForImposter,
+        showGenreToImposter:showGenreToImposter,
+        noImposterMode:noImposterMode,
       }));
         if(gameMode==='Word'){
             navigation.navigate('Select Genre');
@@ -79,6 +87,8 @@ export default function GameSettings({navigation}){
                 <Text style={styles.modeDescription}>Find out who got a different question.</Text>
             </TouchableOpacity>
         </View>
+        {/* Advanced Settings*/}
+        
 
         {/* Start game button*/}
         <TouchableOpacity style={styles.startButton} onPress={handleStart}>
@@ -95,7 +105,7 @@ const styles = StyleSheet.create({
   },
   backButton:{
     position:'absolute',
-    top:50,
+    top:20,
     left:20,
     zIndex:10,
     padding:8,

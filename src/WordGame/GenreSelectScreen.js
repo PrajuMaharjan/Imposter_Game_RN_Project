@@ -16,6 +16,7 @@ const genres=[
     {id:'movies',label:'Movies',emoji:'🎬'},
     {id:'sports',label:'Sports',emoji:'⚽'},
     {id:'professions',label:'Professions',emoji:'💼'},
+    {id:'abstract',label:'Abstract',emoji:'☁️'},
 ];
 
 export default function GenreSelect({navigation}){

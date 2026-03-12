@@ -9,6 +9,9 @@ export function GameProvider({children}){
     gameMode:'Word',
     genre:[],
     playerNames:[],
+    hintsForImposter:true,
+    showGenreToImposter:true,
+    noImposterMode:false,z
 });
 
 return(
