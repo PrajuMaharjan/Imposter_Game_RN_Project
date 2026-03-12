@@ -1,4 +1,4 @@
-import {View,Text,StyleSheet,ImageBackground,TouchableOpacity,Switch} from 'react-native';
+import {View,Text,StyleSheet,ImageBackground,TouchableOpacity,Switch,ScrollView} from 'react-native';
 import {useState} from 'react';
 import {useGame} from './GameContext';
 
@@ -9,8 +9,7 @@ export default function GameSettings({navigation}){
     const [advancedOpen,setAdvancedOpen]=useState(false);
     const [hintsForImposter,setHintsForImposter]=useState(false);
     const [noImposterMode,setnoImposterMode]=useState(false);
-    const [showGenreToImposter,setshowImpostettoImposter]=useState(false);
-    const [noImposterMode,setnoImposterMode]=useState(false);
+    const [showGenreToImposter,setshowGenreToImposter]=useState(false);
     const {setGameState}=useGame();
 
     const handleStart=()=>{
@@ -37,7 +36,7 @@ export default function GameSettings({navigation}){
         <Text style={styles.backArrow}>←</Text>
     </TouchableOpacity>
 
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.heading}>Game Settings</Text>
       {/* Number of Players and Imposters Section*/}
       <View style={styles.row}>
@@ -87,14 +86,53 @@ export default function GameSettings({navigation}){
                 <Text style={styles.modeDescription}>Find out who got a different question.</Text>
             </TouchableOpacity>
         </View>
+
         {/* Advanced Settings*/}
-        
+        <TouchableOpacity style={styles.advancedHeader} onPress={()=>setAdvancedOpen(prev=>!prev)}>
+          <Text style={styles.advancedHeaderText}>⚙️ Advanced Settings</Text>
+          <Text style={styles.advancedArrow}>{advancedOpen ? '▲' : '▼'}</Text>
+        </TouchableOpacity>
+
+        {advancedOpen && (
+          <View style={styles.advancedBox}>
+            {gameMode==='Word' ? (
+              <>
+              {/* Toggle hints for imposter*/}
+              <View style={styles.toggleRow}>
+                <View style={styles.toggleInfo}>
+                  <Text style={styles.toggleLabel}>Show Hints For Imposter?</Text>
+                </View>
+                <Switch value={hintsForImposter} onValueChange={setHintsForImposter} trackColor={{false:'rgba(255,255,255,0.2)',true:'rgba(255,255,255,0.8)'}} thumbColor={'white'}/>
+                </View>
+                <View style={styles.divider}/>
+
+              {/*Toggle to show or hide genre from imposter*/}
+              <View style={styles.toggleRow}>
+                <View style={styles.toggleInfo}>
+                  <Text style={styles.toggleLabel}>Show Genre To Imposter?</Text>
+                </View>
+                <Switch value={showGenreToImposter} onValueChange={setshowGenreToImposter} trackColor={{false:'rgba(255,255,255,0.2)',true:'rgba(255,255,255,0.8)'}} thumbColor={'white'}/>
+                </View>
+                <View style={styles.divider}/>
+                {/*Toggle for No Imposter Mode*/}
+                <View style={styles.toggleRow}>
+                <View style={styles.toggleInfo}>
+                  <Text style={styles.toggleLabel}>No Imposter Mode</Text>
+                </View>
+                <Switch value={noImposterMode} onValueChange={setnoImposterMode} trackColor={{false:'rgba(255,255,255,0.2)',true:'rgba(255,255,255,0.8)'}} thumbColor={'white'}/>
+                </View>
+                </>
+            ):(
+              <Text style={styles.emptyAdvanced}>No advanced Settings yet for Questions Game</Text>
+            )}
+            </View>
+          )}
 
         {/* Start game button*/}
         <TouchableOpacity style={styles.startButton} onPress={handleStart}>
             <Text style={styles.startButtonText}>NEXT</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     </ImageBackground>
     );
 }
@@ -116,8 +154,6 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
   },
   container: {
-    flex: 1,
-    paddingTop:40,
     padding:20,
   },
   heading:{
@@ -203,6 +239,56 @@ const styles = StyleSheet.create({
     fontSize:11,
     color:'rgba(255,255,255,0.7)',
     textAlign:'center',
+  },
+  advancedHeader:{
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems:'center',
+    backgroundColor:'rgba(255,255,255,0.2)',
+    borderRadius:12,
+    padding:14,
+    marginBottom:8,    
+  },
+  advancedHeaderText:{
+    color:'white',
+    fontSize:15,
+    fontWeight:'bold',
+  },
+  advancedArrow:{
+    color:'white',
+    fontSize:12,
+  },
+  advancedBox:{
+    backgroundColor:'rgba(255,255,255,0.15)',
+    borderRadius:12,
+    padding:14,
+    marginBottom:16,
+  },
+  toggleInfo:{
+    flex:1,
+    paddingRight:12,
+  },
+  toggleRow:{
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems:'center',
+    paddingVertical:8,
+  },
+  toggleLabel:{
+    color:'white',
+    fontSize:13,
+    fontWeight:'bold',
+    marginBottom:2,
+  },
+  divider:{
+    height:1,
+    backgroundColor:'rgba(255,255,255,0.15)',
+  },
+  emptyAdvanced:{
+    color:'rgba(255,255,255,0.5)',
+    fontSize:13,
+    textAlign:'center',
+    paddingVertical:8
   },
   startButton:{
     backgroundColor:'rgba(255,255,255,0.3)',

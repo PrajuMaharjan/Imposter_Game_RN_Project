@@ -11,7 +11,7 @@ export function GameProvider({children}){
     playerNames:[],
     hintsForImposter:true,
     showGenreToImposter:true,
-    noImposterMode:false,z
+    noImposterMode:false,
 });
 
 return(
