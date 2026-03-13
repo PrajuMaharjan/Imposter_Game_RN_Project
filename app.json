@@ -3,6 +3,7 @@
     "name": "ImposterGame",
     "slug": "ImposterGame",
     "version": "1.0.0",
+    "assetBundlePatterns": ["assets/*"],
     "orientation": "portrait",
     "icon": "./assets/Logo.png",
     "userInterfaceStyle": "light",
@@ -24,6 +25,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-asset"
+    ]
   }
 }

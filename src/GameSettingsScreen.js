@@ -35,7 +35,7 @@ export default function GameSettings({navigation}){
 <ImageBackground source={require('../assets/HomeImage.png')} style={styles.background} resizeMode="cover">
     
     {/* Back button*/}
-    <TouchableOpacity style={styles.backButton} onPress={()=>navigation.goBack()}>
+    <TouchableOpacity style={styles.backButton} onPress={()=>navigation.navigate('Home')}>
         <Text style={styles.backArrow}>←</Text>
     </TouchableOpacity>
 
