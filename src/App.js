@@ -38,8 +38,8 @@ return(
 
   <Stack.Screen name='Home' component={HomeScreen} options={{headerShown:false}}/>
   <Stack.Screen name='GameSettings' component={GameSettings} options={{headerShown:false}}/>
-  <Stack.Screen name='Settings' component={Settings} />
-    <Stack.Screen name='Advanced Settings' component={Advanced_Settings} options={{headerShown:false}} />
+  <Stack.Screen name='Settings' component={Settings} options={{headerShown:false}}/>
+  <Stack.Screen name='Advanced Settings' component={Advanced_Settings} options={{headerShown:false}} />
 
 
   <Stack.Screen name='Discussion' component={Discussion_1} />

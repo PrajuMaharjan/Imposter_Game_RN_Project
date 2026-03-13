@@ -61,11 +61,10 @@ export default function AdvancedSettingsScreen({navigation}){
                       <Text style={styles.emptyAdvanced}>No advanced Settings yet for Questions Game</Text>
                     )}
                     </View>
-                {/* Start game button*/}
+                {/* Apply Changes button*/}
                     <TouchableOpacity style={styles.applyButton} onPress={handleSettingsChange}>
-                        <Text style={styles.applyButtonText}>Apply Changes</Text>
+                      <Text style={styles.applyButtonText}>Apply Changes</Text>
                     </TouchableOpacity>
-
         </ScrollView>
         </ImageBackground>
     );

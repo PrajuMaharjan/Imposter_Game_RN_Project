@@ -12,6 +12,10 @@ export function GameProvider({children}){
     hintsForImposter:true,
     showGenreToImposter:true,
     noImposterMode:false,
+    music: true,
+    sound: true,
+    haptics: true,
+    shakeForNext: true,
 });
 
 return(
