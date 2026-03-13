@@ -3,10 +3,12 @@ import {useState} from 'react';
 import {useGame} from './GameContext';
 
 export default function AdvancedSettingsScreen({navigation}){
-    const [hintsForImposter,setHintsForImposter]=useState(false);
-    const [noImposterMode,setnoImposterMode]=useState(false);
-    const [showGenreToImposter,setshowGenreToImposter]=useState(false);
-    const {setGameState}=useGame();
+    const {gameState,setGameState}=useGame();
+    const  gameMode=gameState.gameMode;
+    const [hintsForImposter,setHintsForImposter]=useState(gameState.hintsForImposter);
+    const [noImposterMode,setnoImposterMode]=useState(gameState.noImposterMode);
+    const [showGenreToImposter,setshowGenreToImposter]=useState(gameState.showGenreToImposter);
+
 
     const handleSettingsChange=()=>{
         setGameState(prev=>({
@@ -19,7 +21,7 @@ export default function AdvancedSettingsScreen({navigation}){
         navigation.navigate("GameSettings");
     }
     return(
-        <ImageBackground source={require("../assets/HomeImage.png")} style={StyleSheet.background} resizeMode="cover">
+        <ImageBackground source={require("../assets/HomeImage.png")} style={styles.background} resizeMode="cover">
         
         {/*Back button*/}
         <TouchableOpacity style={styles.backButton} onPress={()=>navigation.goBack()}>
@@ -27,39 +29,43 @@ export default function AdvancedSettingsScreen({navigation}){
         </TouchableOpacity>
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.heading}>Advanced Game Settings</Text>
-            <View style={styles.advancedBox}>
-                        {gameMode==='Word' ? (
-                          <>
-                          {/* Toggle hints for imposter*/}
-                          <View style={styles.toggleRow}>
-                            <View style={styles.toggleInfo}>
-                              <Text style={styles.toggleLabel}>Show Hints For Imposter?</Text>
-                            </View>
-                            <Switch value={hintsForImposter} onValueChange={setHintsForImposter} trackColor={{false:'rgba(255,255,255,0.2)',true:'#2196F3'}} thumbColor={'white'}/>
-                            </View>
-                            <View style={styles.divider}/>
-            
-                          {/*Toggle to show or hide genre from imposter*/}
-                          <View style={styles.toggleRow}>
-                            <View style={styles.toggleInfo}>
-                              <Text style={styles.toggleLabel}>Show Genre To Imposter?</Text>
-                            </View>
-                            <Switch value={showGenreToImposter} onValueChange={setshowGenreToImposter} trackColor={{false:'rgba(255,255,255,0.2)',true:'#2196F3'}} thumbColor={'white'}/>
-                            </View>
-                            <View style={styles.divider}/>
-                            {/*Toggle for No Imposter Mode*/}
-                            <View style={styles.toggleRow}>
-                            <View style={styles.toggleInfo}>
-                              <Text style={styles.toggleLabel}>No Imposter Mode</Text>
-                            </View>
-                            <Switch value={noImposterMode} onValueChange={setnoImposterMode} trackColor={{false:'rgba(255,255,255,0.2)',true:'#2196F3'}} thumbColor={'white'}/>
-                            </View>
-                            </>
-                        ):(
-                          <Text style={styles.emptyAdvanced}>No advanced Settings yet for Questions Game</Text>
-                        )}
+                  <View style={styles.advancedBox}>
+                    {gameMode==='Word' ? (
+                      <>
+                      {/* Toggle hints for imposter*/}
+                      <View style={styles.toggleRow}>
+                        <View style={styles.toggleInfo}>
+                          <Text style={styles.toggleLabel}>Show Hints For Imposter?</Text>
                         </View>
+                        <Switch value={hintsForImposter} onValueChange={setHintsForImposter} trackColor={{false:'rgba(255,255,255,0.2)',true:'#2196F3'}} thumbColor={'white'}/>
+                        </View>
+                        <View style={styles.divider}/>
         
+                      {/*Toggle to show or hide genre from imposter*/}
+                      <View style={styles.toggleRow}>
+                        <View style={styles.toggleInfo}>
+                          <Text style={styles.toggleLabel}>Show Genre To Imposter?</Text>
+                        </View>
+                        <Switch value={showGenreToImposter} onValueChange={setshowGenreToImposter} trackColor={{false:'rgba(255,255,255,0.2)',true:'#2196F3'}} thumbColor={'white'}/>
+                        </View>
+                        <View style={styles.divider}/>
+                        {/*Toggle for No Imposter Mode*/}
+                        <View style={styles.toggleRow}>
+                        <View style={styles.toggleInfo}>
+                          <Text style={styles.toggleLabel}>No Imposter Mode</Text>
+                        </View>
+                        <Switch value={noImposterMode} onValueChange={setnoImposterMode} trackColor={{false:'rgba(255,255,255,0.2)',true:'#2196F3'}} thumbColor={'white'}/>
+                        </View>
+                        </>
+                    ):(
+                      <Text style={styles.emptyAdvanced}>No advanced Settings yet for Questions Game</Text>
+                    )}
+                    </View>
+                {/* Start game button*/}
+                    <TouchableOpacity style={styles.applyButton} onPress={handleSettingsChange}>
+                        <Text style={styles.applyButtonText}>Apply Changes</Text>
+                    </TouchableOpacity>
+
         </ScrollView>
         </ImageBackground>
     );
@@ -92,5 +98,54 @@ const styles=StyleSheet.create({
         marginBottom:30,
         marginTop:70,
         textAlign:'center',
+  },
+    advancedBox:{
+    backgroundColor:'rgba(255,255,255,0.15)',
+    borderRadius:12,
+    padding:14,
+    marginBottom:16,
+  },
+  toggleInfo:{
+    flex:1,
+    paddingRight:12,
+  },
+  toggleRow:{
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems:'center',
+    paddingVertical:8,
+  },
+  toggleLabel:{
+    color:'white',
+    fontSize:13,
+    fontWeight:'bold',
+    marginBottom:2,
+  },
+  divider:{
+    height:1,
+    backgroundColor:'rgba(255,255,255,0.15)',
+  },
+  emptyAdvanced:{
+    color:'rgba(255,255,255,0.5)',
+    fontSize:13,
+    textAlign:'center',
+    paddingVertical:8,
+    color:'white',
+  },
+  applyButton:{
+    backgroundColor:'rgba(255,255,255,0.3)',
+    paddingVertical:16,
+    borderRadius:12,
+    alignItems:'center',
+    marginTop:10,
+    marginBottom:50,
+    borderWidth:2,
+    borderColor:'white',
+  },
+  applyButtonText:{
+    color:'white',
+    fontSize:18,
+    fontWeight:'bold',
+    letterSpacing:1,
   },
 });

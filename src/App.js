@@ -9,6 +9,7 @@ import { GameProvider } from './GameContext';
 import HomeScreen from './HomeScreen';
 import Settings from './SettingsScreen';
 import GameSettings from './GameSettingsScreen';
+import Advanced_Settings from './AdvancedSettingsScreen';
 
 /* Word Game Screens*/
 import Discussion_1 from './WordGame/DiscussionScreen';
@@ -17,7 +18,6 @@ import PlayerEntry_1 from './WordGame/PlayerNamesScreen';
 import RoleReveal_1 from './WordGame/RoleRevealScreen';
 import Voting_1 from './WordGame/VotingScreen';
 import Results_1 from './WordGame/ResultsScreen';
-import Advanced_Settings_1 from './AdvancedSettingsScreen';
 
 /* Question Game Screens*/
 import Discussion_2 from './QuestionGame/DiscussionScreen';
@@ -26,7 +26,6 @@ import PlayerEntry_2 from './QuestionGame/PlayerNamesScreen';
 import RoleReveal_2 from './QuestionGame/RoleRevealScreen';
 import Voting_2 from './QuestionGame/VotingScreen';
 import Results_2 from './QuestionGame/ResultsScreen';
-import Advanced_Settings_2 from './QuestionGame/AdvancedSettingsScreen';
 
 const Stack=createNativeStackNavigator();
 
@@ -55,6 +54,7 @@ return(
   <Stack.Screen name='Names-2' component={PlayerEntry_2} />
   <Stack.Screen name='Roles-2' component={RoleReveal_2} />
   <Stack.Screen name='Vote-2' component={Voting_2} />
+  <Stack.Screen name='Results-2' component={Results_2} />
 
   </Stack.Navigator>
   </NavigationContainer>
