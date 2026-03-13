@@ -77,7 +77,7 @@ const styles=StyleSheet.create({
     },
     backButton:{
         position:'absolute',
-        top:20,
+        top:50,
         left:20,
         zIndex:10,
         padding:8,
@@ -95,7 +95,7 @@ const styles=StyleSheet.create({
         fontWeight:'bold',
         color:'white',
         marginBottom:30,
-        marginTop:70,
+        marginTop:100,
         textAlign:'center',
   },
     advancedBox:{
