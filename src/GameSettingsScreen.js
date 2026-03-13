@@ -88,7 +88,7 @@ export default function GameSettings({navigation}){
         </View>
 
         {/* Advanced Settings*/}
-        <TouchableOpacity style={styles.advancedHeader} onPress={()=>setAdvancedOpen(prev=>!prev)}>
+        <TouchableOpacity style={styles.advancedHeader} onPress={()=>navigation.navigate(prev=>!prev)}>
           <Text style={styles.advancedHeaderText}>⚙️ Advanced Settings</Text>
           <Text style={styles.advancedArrow}>{advancedOpen ? '▲' : '▼'}</Text>
         </TouchableOpacity>

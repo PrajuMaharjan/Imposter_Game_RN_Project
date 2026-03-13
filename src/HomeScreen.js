@@ -13,6 +13,12 @@ return (
       <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Settings')}>
         <Text style={styles.buttonText}>SETTINGS</Text>
       </TouchableOpacity>
+      
+      {/*Testing Button*/}
+      <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Advanced Settings')}>
+        <Text style={styles.buttonText}>Test</Text>
+      </TouchableOpacity>
+      
       </View>
     </View>
     </ImageBackground>
