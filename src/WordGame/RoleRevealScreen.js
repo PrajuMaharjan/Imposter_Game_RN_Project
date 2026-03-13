@@ -3,7 +3,7 @@ import {View,Text,Button,StyleSheet} from 'react-native';
 export default function Vote({navigation}){
     return(
         <View style={styles.container}>
-            <Text style={styles.title}>Voting Screen</Text>
+            <Text style={styles.title}>Role Reveal Screen</Text>
         </View>
     );
 }
