@@ -31,7 +31,7 @@ const Stack=createNativeStackNavigator();
 
 export default function App() {
 return(
-<ImageBackground source={require('../assets/HomeImage.png')} style={{flex:1}} resizeMode='cover'>
+<ImageBackground source={require('../assets/Images/HomeImage.png')} style={{flex:1}} resizeMode='cover'>
   <GameProvider>
   <NavigationContainer>
   <Stack.Navigator initialRouteName="Home" screenOptions={{contentStyle:{backgroundColor:'black'},}}>

@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "assetBundlePatterns": ["assets/*"],
     "orientation": "portrait",
-    "icon": "./assets/Logo.png",
+    "icon": "./assets/Images/Logo.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash-icon.png",

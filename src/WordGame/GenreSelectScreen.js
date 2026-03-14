@@ -42,7 +42,7 @@ export default function GenreSelect({navigation}){
     }
 
     return(
-<ImageBackground source={require('../../assets/HomeImage.png')} style={styles.background} resizeMode="cover">
+<ImageBackground source={require('../../assets/Images/HomeImage.png')} style={styles.background} resizeMode="cover">
     
     {/* Back button*/}
     <TouchableOpacity style={styles.backButton} onPress={()=>navigation.goBack()}>

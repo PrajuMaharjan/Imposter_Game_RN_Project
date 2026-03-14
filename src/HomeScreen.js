@@ -2,7 +2,7 @@ import {View,Text,TouchableOpacity,StyleSheet,ImageBackground} from 'react-nativ
 
 export default function HomeScreen({navigation}){
 return (
-  <ImageBackground source={require('../assets/HomeImage.png')} style={styles.background} resizeMode="cover">
+  <ImageBackground source={require('../assets/Images/HomeImage.png')} style={styles.background} resizeMode="cover">
     <View style={styles.container}>
       <Text style={styles.title}>Imposter Game</Text>
       <View style={styles.buttonContainer}>
