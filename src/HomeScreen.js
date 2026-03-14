@@ -4,7 +4,7 @@ export default function HomeScreen({navigation}){
 return (
   <ImageBackground source={require('../assets/Images/HomeImage.png')} style={styles.background} resizeMode="cover">
     <View style={styles.container}>
-      <Text style={styles.title}>Imposter Game</Text>
+      <Text style={styles.title}>Who's the Imposter?</Text>
       <View style={styles.buttonContainer}>
       <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('GameSettings')}>
         <Text style={styles.buttonText}>PLAY GAME</Text>
