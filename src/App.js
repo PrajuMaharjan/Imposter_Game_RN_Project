@@ -42,7 +42,7 @@ return(
   <Stack.Screen name='Advanced Settings' component={Advanced_Settings} options={{headerShown:false}} />
 
 
-  <Stack.Screen name='Discussion' component={Discussion_1} />
+  <Stack.Screen name='Discussion' component={Discussion_1} options={{headerShown:false}}/>
   <Stack.Screen name='Select Genre' component={GenreSelect_1} options={{headerShown:false}} />
   <Stack.Screen name='Names' component={PlayerEntry_1} options={{headerShown:false}}/>
   <Stack.Screen name='Roles' component={RoleReveal_1} options={{headerShown:false}}/>
