@@ -6,6 +6,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import QuitButton from "../../components/QuitButton";
 import ScreenTitle from "../../components/ScreenTitle";
 import ChoiceBox from "../../components/ChoiceBox";
+import NextButton from "../../components/NextButton";
 
 type RootParamList={
     Roles:undefined;
@@ -19,6 +20,8 @@ type VotingScreenProps={
     navigation:NativeStackNavigationProp<RootParamList,'Vote'>;
 };
 
+type Mode="voting" | "passing";
+
 export default function VotingScreen({navigation}:VotingScreenProps){
     const {gameState}=useGame(); 
     const impostersCount=gameState.imposters;
@@ -31,9 +34,11 @@ export default function VotingScreen({navigation}:VotingScreenProps){
     
     // Storing votes as { playerName : voteCount }
     const [votes,setVotes]=useState<Record<string,number>>(Object.fromEntries(playerNames.map(name=>[name,0])));
+    const [mode,setMode]=useState<Mode>("voting");
     const currentVoter=playerNames[currentVoterIndex];
     const isLastVoter=currentVoterIndex===playerNames.length-1;
     const remainingVotes=impostersCount-votesThisTurn;
+    const nextVoter=playerNames[currentVoterIndex+1];
 
     // Disable go back from harwarebackbuttonpress
     useFocusEffect(
@@ -56,53 +61,77 @@ export default function VotingScreen({navigation}:VotingScreenProps){
             if(isLastVoter){
                 navigation.navigate('Results',{votes:updatedVotes});
             }else{
-                setCurrentVoterIndex(i=>i+1);
+                setMode("passing");
                 setVotesThisTurn(0);
             }
         }
     };
 
-    return(
-        <ImageBackground source={require('../../../assets/Images/HomeImage.png')} style={styles.background} resizeMode="cover">
-            <View style={styles.overlay}>
+    const handlePassConfirm=():void=>{
+        setCurrentVoterIndex(i=>i+1);
+        setMode("voting");
+    };
 
-                {/* X button */}
-                <QuitButton onConfirm={()=>navigation.reset({index:0,routes:[{name:"Home"}]})} />
+    if(mode==="passing"){
+        return(
+            <ImageBackground source={require('../../../assets/Images/HomeImage.png')} style={styles.background} resizeMode="cover">
+                <View style={styles.overlay}>
 
-                <ScreenTitle label="Vote" style={styles.title} />
-                <Text style={styles.subtitle}>
-                {multipleImposters
-                                    ?   `Who are the ${impostersCount} imposters?`
-                                    :   `Who do you think is the imposter?`}
-                </Text>
+                    {/* X button */}
+                    <QuitButton onConfirm={()=>navigation.reset({index:0,routes:[{name:"Home"}]})} />
 
-                {/*Current Voter*/}
-                <View style={styles.voterBox}>
-                    <Text style={styles.voterLabel}>Current Voter</Text>
-                    <Text style={styles.voterName}>{currentVoter}</Text>
-                    <Text style={styles.voterCounter}>{currentVoterIndex+1} of {playerNames.length}</Text>
-                {
-                    multipleImposters && (
-                        <Text style={styles.remainingLabel}>
-                            {remainingVotes} vote{remainingVotes!==1?'s':''} remaining
-                        </Text>
-                    )}
-                </View>
-                
-                {/* Voting Options */}
-                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-                    {playerNames.filter(name=>name!==currentVoter).map(name=>(
-                        <ChoiceBox key={name}
-                                   label={name}
-                                   onPress={()=>handleVote(name)}
+                    <View style={styles.passingContainer}>
+                        <Text style={styles.passingLabel}>Pass the phone to</Text>
+                        <Text style={styles.passingName}>{nextVoter}</Text>
+                        <NextButton label="START VOTING"
+                                    onPress={handlePassConfirm}
+                                    style={styles.readyButton}
                         />
-                    ))}
-                </ScrollView>
+                    </View>
+                </View>
+            </ImageBackground>
+        );
+    }
+        return(
+            <ImageBackground source={require('../../../assets/Images/HomeImage.png')} style={styles.background} resizeMode="cover">
+                <View style={styles.overlay}>
 
-            </View>
-        </ImageBackground>
-    );
-}
+                    {/* X button */}
+                    <QuitButton onConfirm={()=>navigation.reset({index:0,routes:[{name:"Home"}]})} />
+                    <ScreenTitle label="Vote" style={styles.title} />
+                    <Text style={styles.subtitle}>
+                    {multipleImposters
+                                        ?   `Who are the ${impostersCount} imposters?`
+                                        :   `Who do you think is the imposter?`}
+                    </Text>
+
+                    {/*Current Voter*/}
+                    <View style={styles.voterBox}>
+                        <Text style={styles.voterLabel}>Current Voter</Text>
+                        <Text style={styles.voterName}>{currentVoter}</Text>
+                        <Text style={styles.voterCounter}>{currentVoterIndex+1} of {playerNames.length}</Text>
+                    {
+                        multipleImposters && (
+                            <Text style={styles.remainingLabel}>
+                                {remainingVotes} vote{remainingVotes!==1?'s':''} remaining
+                            </Text>
+                        )}
+                    </View>
+                    
+                    {/* Voting Options */}
+                    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+                        {playerNames.filter(name=>name!==currentVoter).map(name=>(
+                            <ChoiceBox key={name}
+                                    label={name}
+                                    onPress={()=>handleVote(name)}
+                            />
+                        ))}
+                    </ScrollView>
+
+                </View>
+            </ImageBackground>
+        );
+    }
 
 const styles=StyleSheet.create({
     background:{
@@ -160,4 +189,25 @@ const styles=StyleSheet.create({
     scrollContent:{
         paddingBottom:20,
     },
+    passingContainer:{
+        flex:1,
+        alignItems:"center",
+        justifyContent:"center",
+        gap:16,
+    },
+    passingLabel:{
+        fontSize:18,
+        color:"rgba(255,255,255,0.7)",
+        textAlign:"center",
+    },
+    passingName:{
+        fontSize:32,
+        fontWeight:"bold",
+        color:"white",
+        textAlign:"center",
+        marginBottom:16,
+    },
+    readyButton:{
+        width:'100%'
+    }
 });
