@@ -2,11 +2,11 @@ import {View,StyleSheet,ImageBackground,BackHandler,ScrollView} from 'react-nati
 import { useMemo,useCallback } from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
-import { useGame } from '../../../store/GameContext';
-import QuitButton from "../../components/QuitButton";
-import ScreenTitle from "../../components/ScreenTitle";
-import NextButton from "../../components/NextButton";
-import InfoBox from "../../components/InfoBox";
+import { useGame } from '@store/GameContext';
+import QuitButton from "@components/QuitButton";
+import ScreenTitle from "@components/ScreenTitle";
+import NextButton from "@components/NextButton";
+import InfoBox from "@components/InfoBox";
 
 type RootParamList={
     Roles:undefined;
@@ -80,7 +80,7 @@ const styles=StyleSheet.create({
     },
     scrollContent:{
         paddingBottom:20,
-  },
+    },
     overlay:{
         flex:1,
         backgroundColor:'rgba(0,0,0,0.45)',

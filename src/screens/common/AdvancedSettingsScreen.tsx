@@ -1,12 +1,12 @@
 import {View,Text,StyleSheet,ImageBackground,ScrollView,BackHandler} from 'react-native';
 import {useState,useEffect} from 'react';
 import {NativeStackNavigationProp}  from "@react-navigation/native-stack";
-import {useGame} from '../../store/GameContext';
-import ToggleRow from "../components/ToggleRow";
-import BackButton from "../components/BackButton";
-import ScreenTitle from "../components/ScreenTitle";
-import NextButton from "../components/NextButton";
-import ConfirmModal from "../components/ConfirmModal";
+import {useGame} from '@store/GameContext';
+import ToggleRow from "@components/ToggleRow";
+import BackButton from "@components/BackButton";
+import ScreenTitle from "@components/ScreenTitle";
+import NextButton from "@components/NextButton";
+import ConfirmModal from "@components/ConfirmModal";
 
 type RootStackParamList={
   GameSettings:undefined;
@@ -40,9 +40,9 @@ export default function AdvancedSettingsScreen({navigation}:AdvancedSettingsScre
     
     //Check for changed settings
     const hasChanges=
-    hintsForImposter!==original.hintsForImposter ||
-    showGenreToImposter!==original.showGenreToImposter ||
-    noImposterMode!==original.noImposterMode;
+      hintsForImposter!==original.hintsForImposter ||
+      showGenreToImposter!==original.showGenreToImposter ||
+      noImposterMode!==original.noImposterMode;
 
     // Save Settings to GameContext
     const saveSettings=():void=>{
@@ -91,44 +91,45 @@ export default function AdvancedSettingsScreen({navigation}:AdvancedSettingsScre
     },[hasChanges,hintsForImposter,showGenreToImposter,noImposterMode]);
 
     return(
-        <ImageBackground source={require("../../assets/Images/HomeImage.png")} style={styles.background} resizeMode="cover">
+        <ImageBackground source={require("../../../assets/Images/HomeImage.png")} style={styles.background} resizeMode="cover">
         
-        {/*Back button*/}
-        <BackButton onPress={handleBackPress} />
+          {/*Back button*/}
+          <BackButton onPress={handleBackPress} />
 
-        <ScrollView contentContainerStyle={styles.container}>
-            <ScreenTitle style={styles.heading} label="Advanced Game Settings" />
-                  <View style={styles.advancedBox}>
-                    {gameMode==='Word' ? (
-                    <>
-                      {/* Toggle hints for imposter*/}
-                      <ToggleRow label="Show Hints For Imposter?" value={hintsForImposter} onValueChange={setHintsForImposter} />  
-                      <View style={styles.divider} />
-        
-                      {/*Toggle to show or hide genre from imposter*/}
-                      <ToggleRow label="Show Genre To Imposter" value={showGenreToImposter} onValueChange={setShowGenreToImposter} />  
-                      <View style={styles.divider} />
+          <ScrollView contentContainerStyle={styles.container}>
+              <ScreenTitle style={styles.heading} label="Advanced Game Settings" />
+                    <View style={styles.advancedBox}>
+                      {gameMode==='Word' ? (
+                      <>
+                        {/* Toggle hints for imposter*/}
+                        <ToggleRow label="Show Hints For Imposter?" value={hintsForImposter} onValueChange={setHintsForImposter} />  
+                        <View style={styles.divider} />
+          
+                        {/*Toggle to show or hide genre from imposter*/}
+                        <ToggleRow label="Show Genre To Imposter" value={showGenreToImposter} onValueChange={setShowGenreToImposter} />  
+                        <View style={styles.divider} />
 
-                      {/*Toggle for No Imposter Mode*/}
-                      <ToggleRow label="No Imposter Mode" value={noImposterMode} onValueChange={setNoImposterMode} />  
-                    </>
-                    ):(
-                      <Text style={styles.emptyAdvanced}>No advanced Settings yet for Questions Game</Text>
-                    )}
+                        {/*Toggle for No Imposter Mode*/}
+                        <ToggleRow label="No Imposter Mode" value={noImposterMode} onValueChange={setNoImposterMode} />  
+                      </>
+                      ):(
+                        <Text style={styles.emptyAdvanced}>No advanced Settings yet for Questions Game</Text>
+                      )}
                     </View>
 
-                {/* Apply Changes button*/}
+                    {/* Apply Changes button*/}
                     <NextButton label="Apply Changes" style={styles.applyButton} onPress={handleApply} />
-           </ScrollView>
-           <ConfirmModal visible={modalVisible}
-                         title="Unsaved Changes"
-                         body="You have unsaved changes. What would you like to do?"
-                         onDismiss={()=>setModalVisible(false)}
-                         buttons={[
-                        {label:'Save',onPress:handleModalSave,style:"default"},
-                        {label:'Discard',onPress:handleModalDiscard,style:'destructive'},
-                        {label:'Cancel',onPress:()=>setModalVisible(false),style:'cancel'},
-                    ]}
+          </ScrollView>
+
+          <ConfirmModal visible={modalVisible}
+                        title="Unsaved Changes"
+                        body="You have unsaved changes. What would you like to do?"
+                        onDismiss={()=>setModalVisible(false)}
+                        buttons={[
+                          {label:'Save',onPress:handleModalSave,style:"default"},
+                          {label:'Discard',onPress:handleModalDiscard,style:'destructive'},
+                          {label:'Cancel',onPress:()=>setModalVisible(false),style:'cancel'},
+                        ]}
             />
         </ImageBackground>
     );

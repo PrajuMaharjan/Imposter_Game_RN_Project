@@ -2,10 +2,10 @@ import {View,Text,StyleSheet,ImageBackground,TouchableOpacity,BackHandler,Activi
 import {useState,useEffect,useCallback} from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
-import { useGame } from '../../../store/GameContext';
-import {getRandomWord,getRandomHint,getCategoryLabel} from '../../../constants/GamePlayFunctions_WordGame';
-import RoleCard from "../../components/RoleCard";
-import QuitButton from "../../components/QuitButton";
+import { useGame } from '@store/GameContext';
+import {getRandomWord,getRandomHint,getCategoryLabel} from '@constants/GamePlayFunctions_WordGame';
+import RoleCard from "@components/RoleCard";
+import QuitButton from "@components/QuitButton";
 
 type RootParamList={
     Roles:undefined;
@@ -51,37 +51,37 @@ export default function RoleRevealScreen({navigation}:RoleRevealScreenProps){
                     const randomPos=Math.floor(Math.random()*playerpool.length);
                     imposterIndices.push(playerpool[randomPos]);
                     playerpool.splice(randomPos,1);                 
+                }
             }
+            const assigned:AssignedRole[]=names.map((name,i)=>{
+                const isImposter=imposterIndices.includes(i);
+                return{
+                    name,
+                    isImposter,
+                    word:wordEntry?wordEntry.word:'???',
+                    hint:(isImposter && wordEntry) ? getRandomHint(wordEntry.hints):null,
+                    category:wordEntry ? wordEntry.category:null,
+                    noImposterTriggered,
+                };
+            });
+            const shuffled=[...assigned].sort(()=>Math.random()-0.5);
+            setRoles(shuffled);
+            setGameState(prev=>({
+                                 ...prev,
+                                 imposterNames:assigned.filter(p=>p.isImposter).map(p=>p.name),
+            }));
+            setLoading(false);
         }
-        const assigned:AssignedRole[]=names.map((name,i)=>{
-            const isImposter=imposterIndices.includes(i);
-            return{
-                name,
-                isImposter,
-                word:wordEntry?wordEntry.word:'???',
-                hint:(isImposter && wordEntry) ? getRandomHint(wordEntry.hints):null,
-                category:wordEntry ? wordEntry.category:null,
-                noImposterTriggered,
-            };
-        });
-        const shuffled=[...assigned].sort(()=>Math.random()-0.5);
-        setRoles(shuffled);
-        setGameState(prev=>({
-            ...prev,
-            imposterNames:assigned.filter(p=>p.isImposter).map(p=>p.name),
-    }));
-        setLoading(false);
-    }
-    assignRoles();
-
-}, []);
+        assignRoles();
+    }, []);
     
     // Disable go back from harwarebackbuttonpress
     useFocusEffect(
         useCallback(()=>{
             const backhandler=BackHandler.addEventListener('hardwareBackPress',()=>true);
             return ()=>backhandler.remove();
-    },[]));
+        },[])
+    );
 
 
     const handleFlip=useCallback(():void=>{
@@ -141,11 +141,11 @@ export default function RoleRevealScreen({navigation}:RoleRevealScreenProps){
     // Loading State
     if(loading || !roles){
         return(
-        <ImageBackground source={require('../../../assets/Images/HomeImage.png')} style={styles.background} resizeMode="cover">
-            <View style={styles.loadingContainer}>
-                <ActivityIndicator size='large' color='white'/>
-            </View>
-        </ImageBackground>
+            <ImageBackground source={require('../../../assets/Images/HomeImage.png')} style={styles.background} resizeMode="cover">
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size='large' color='white'/>
+                </View>
+            </ImageBackground>
     );
     }
     if(!roles[currentIndex]){
@@ -159,40 +159,41 @@ export default function RoleRevealScreen({navigation}:RoleRevealScreenProps){
     return(
         <ImageBackground source={require('../../../assets/Images/HomeImage.png')} style={styles.background} resizeMode="cover">
             <View style={styles.overlay}>
-            {/* X button*/}
-            <QuitButton onConfirm={()=>navigation.reset({index:0,routes:[{name:'Home'}]})} />
+                {/* X button*/}
+                <QuitButton onConfirm={()=>navigation.reset({index:0,routes:[{name:'Home'}]})} />
                 
-            {/*Player's name */}
-            <Text style={styles.playerName}>{currentRole.name}</Text>
+                {/*Player's name */}
+                <Text style={styles.playerName}>{currentRole.name}</Text>
             
-            {/* Instructions */}
-            {!isFlipped && (
-                <Text style={styles.instruction}>
-                    Tap the card or shake the screen to reveal the word.{"\n"}Make sure no one else sees it!
-                </Text>
-            )}
-
-            {/*  Le Card */}
-            <RoleCard key={currentIndex}
-                      isFlipped={isFlipped}
-                      onFlip={handleFlip}
-                      renderBack={renderCardBack}
-                      cardBackStyle={getCardBackStyle()}
-                      shakeForNext={shakeForNext}
-            />
-
-            {/* Pass to Next Person / Start Discussion button*/}
-            {isFlipped && (
-                <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-                    <Text style={styles.nextButtonText}>
-                        {isLastPlayer ? 'START DISCUSSION':`Pass to ${roles[currentIndex+1].name}`}
+                {/* Instructions */}
+                {!isFlipped && (
+                    <Text style={styles.instruction}>
+                        Tap the card or shake the screen to reveal the word.{"\n"}Make sure no one else sees it!
                     </Text>
-                </TouchableOpacity>
-            )}
+                )}
+
+                {/*  Le Card */}
+                <RoleCard key={currentIndex}
+                          isFlipped={isFlipped}
+                          onFlip={handleFlip}
+                          renderBack={renderCardBack}
+                          cardBackStyle={getCardBackStyle()}
+                          shakeForNext={shakeForNext}
+                />
+
+                {/* Pass to Next Person / Start Discussion button*/}
+                {isFlipped && (
+                    <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
+                        <Text style={styles.nextButtonText}>
+                            {isLastPlayer ? 'START DISCUSSION':`Pass to ${roles[currentIndex+1].name}`}
+                        </Text>
+                    </TouchableOpacity>
+                )}
             </View>
         </ImageBackground>
     )
 }
+
 const styles=StyleSheet.create({
     background:{
         flex:1,
