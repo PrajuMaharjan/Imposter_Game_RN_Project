@@ -1,12 +1,12 @@
 import {View,Text,StyleSheet,ImageBackground,BackHandler,ScrollView} from 'react-native';
 import { useState,useCallback,useMemo} from 'react';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import {useGame} from '../../../store/GameContext';
+import {useGame} from '@store/GameContext';
 import { useFocusEffect } from '@react-navigation/native';
-import QuitButton from "../../components/QuitButton";
-import ScreenTitle from "../../components/ScreenTitle";
-import ChoiceBox from "../../components/ChoiceBox";
-import NextButton from "../../components/NextButton";
+import QuitButton from "@components/QuitButton";
+import ScreenTitle from "@components/ScreenTitle";
+import ChoiceBox from "@components/ChoiceBox";
+import NextButton from "@components/NextButton";
 
 type RootParamList={
     Roles:undefined;

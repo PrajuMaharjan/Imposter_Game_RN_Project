@@ -4,10 +4,10 @@ import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RouteProp} from "@react-navigation/native";
 import {useGame} from "../../../store/GameContext";
 import { useFocusEffect } from '@react-navigation/native';
-import ScreenTitle from "../../components/ScreenTitle";
-import NextButton from "../../components/NextButton"; 
-import ConfirmModal from "../../components/ConfirmModal";
-import ImposterRevealCard from "../../components/ImposterRevealCard";
+import ScreenTitle from "@components/ScreenTitle";
+import NextButton from "@components/NextButton"; 
+import ConfirmModal from "@components/ConfirmModal";
+import ImposterRevealCard from "@components/ImposterRevealCard";
 
 type RootParamList={
     Roles:undefined;

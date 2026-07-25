@@ -2,10 +2,10 @@ import {View,Text,StyleSheet,TouchableOpacity,ImageBackground,ScrollView, BackHa
 import {useState,useMemo, useCallback} from 'react';
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RouteProp} from "@react-navigation/native"
-import {useGame} from '../../../store/GameContext';
+import {useGame} from '@store/GameContext';
 import { useFocusEffect } from '@react-navigation/native';
-import QuitButton from "../../components/QuitButton";
-import ScreenTitle from "../../components/ScreenTitle";
+import QuitButton from "@components/QuitButton";
+import ScreenTitle from "@components/ScreenTitle";
 
 type RootParamList={
     Results:{votes:Record<string,number>};

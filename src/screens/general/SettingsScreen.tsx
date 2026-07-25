@@ -1,12 +1,12 @@
-import {View,Text,StyleSheet,ImageBackground,ScrollView,BackHandler} from 'react-native';
+import {View,StyleSheet,ImageBackground,ScrollView,BackHandler} from 'react-native';
 import {useState,useEffect} from 'react';
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
-import {useGame} from '../../store/GameContext';
-import ToggleRow from "../components/ToggleRow";
-import BackButton from "../components/BackButton";
-import ScreenTitle from "../components/ScreenTitle";
-import NextButton from "../components/NextButton";
-import ConfirmModal from "../components/ConfirmModal";
+import {useGame} from '@store/GameContext';
+import ToggleRow from "@components/ToggleRow";
+import BackButton from "@components/BackButton";
+import ScreenTitle from "@components/ScreenTitle";
+import NextButton from "@components/NextButton";
+import ConfirmModal from "@components/ConfirmModal";
 
 type RootStackParamList={
     Home:undefined;
@@ -42,10 +42,10 @@ export default function Settings({navigation}:SettingsScreenProps){
 
     // Check for changed settings
     const hasChanges=
-    music!==original.music ||
-    sound!==original.sound ||
-    haptics!==original.haptics ||
-    shakeForNext!==original.shakeForNext;
+        music!==original.music ||
+        sound!==original.sound ||
+        haptics!==original.haptics ||
+        shakeForNext!==original.shakeForNext;
 
     // Save settings to GameContext
     const saveSettings=():void=>{
@@ -54,7 +54,7 @@ export default function Settings({navigation}:SettingsScreenProps){
         music,
         sound,
         haptics,
-        shakeForNext,
+        shakeForNext
         }));
     }
 
@@ -95,35 +95,37 @@ export default function Settings({navigation}:SettingsScreenProps){
     },[hasChanges,music,sound,haptics,shakeForNext]);
 
     return(
-        <ImageBackground source={require("../../assets/Images/HomeImage.png")} style={styles.background} resizeMode="cover">
-            {/*Back button*/}
-                <BackButton onPress={handleBackPress} />
-
-        <ScrollView contentContainerStyle={styles.container}>
-            <ScreenTitle label="Settings" style={styles.title} />
-            <View style={styles.box}>
-
-                {/* Music toggle*/}
-                <ToggleRow label="Music" value={music} onValueChange={setMusic} />
-                <View style={styles.divider} />
-
-                {/* Sound toggle*/}
-                <ToggleRow label="Sound" value={sound} onValueChange={setSound} />
-                <View style={styles.divider} />
-
-                {/* Haptics toggle*/}
-                <ToggleRow label="haptics" value={haptics} onValueChange={setHaptics} />
-                <View style={styles.divider} />
-
-                {/* Shake toggle*/}
-                <ToggleRow label="Shake to Move to Next Person" value={shakeForNext} onValueChange={setShakeForNext} />
-                <View style={styles.divider} />
-
-            </View>
+        <ImageBackground source={require("../../../assets/Images/HomeImage.png")} style={styles.background} resizeMode="cover">
             
-            {/* Apply changes button*/}
+            {/*Back button*/}
+            <BackButton onPress={handleBackPress} />
+
+            <ScrollView contentContainerStyle={styles.container}>
+                <ScreenTitle label="Settings" style={styles.title} />
+                
+                <View style={styles.box}>
+
+                    {/* Music toggle*/}
+                    <ToggleRow label="Music" value={music} onValueChange={setMusic} />
+                    <View style={styles.divider} />
+
+                    {/* Sound toggle*/}
+                    <ToggleRow label="Sound" value={sound} onValueChange={setSound} />
+                    <View style={styles.divider} />
+
+                    {/* Haptics toggle*/}
+                    <ToggleRow label="Haptics" value={haptics} onValueChange={setHaptics} />
+                    <View style={styles.divider} />
+
+                    {/* Shake toggle*/}
+                    <ToggleRow label="Shake to Move to Next Person" value={shakeForNext} onValueChange={setShakeForNext} />
+                    <View style={styles.divider} />
+
+                </View>
+            
+                {/* Apply changes button*/}
                 <NextButton label="Apply Changes" style={styles.applyButton} onPress={handleSettingsChange} />
-        </ScrollView>
+            </ScrollView>
 
         <ConfirmModal visible={modalVisible}
                       title="Unsaved Changes"
@@ -135,7 +137,7 @@ export default function Settings({navigation}:SettingsScreenProps){
                         {label:"Cancel",onPress:()=>setModalVisible(false),style:"cancel"},
                     ]}
         />
-    </ImageBackground>
+        </ImageBackground>
     );
 }
 
@@ -152,16 +154,16 @@ const styles=StyleSheet.create({
         flex:1,
     },
     box:{
-    backgroundColor:'rgba(255,255,255,0.15)',
-    borderRadius:12,
-    padding:14,
-    marginBottom:16,
-  },
-  divider:{
-    height:1,
-    backgroundColor:'rgba(255,255,255,0.15)',
-  },
-  applyButton:{
-    marginBottom:50,
-  },
+        backgroundColor:'rgba(255,255,255,0.15)',
+        borderRadius:12,
+        padding:14,
+        marginBottom:16,
+    },
+    divider:{
+        height:1,
+        backgroundColor:'rgba(255,255,255,0.15)',
+    },
+    applyButton:{
+        marginBottom:50,
+    },
 });
