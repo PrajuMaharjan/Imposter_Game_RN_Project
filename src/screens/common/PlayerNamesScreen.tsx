@@ -13,6 +13,7 @@ import CounterBox from "@components/CounterBox";
 type RootParamList={
     Names : {players:number; imposters:number};
     Roles:undefined;
+    "All Players":undefined;
 };
 
 type PlayerEntry={
@@ -102,7 +103,7 @@ export default function EnterNames({navigation,route}:Props){
             imposters,
             playerNames:players.map(p=>p.name),
         }));
-        navigation.navigate('Roles');
+        navigation.navigate(gameState.gameMode==='Word' ? "Roles" : "All Players");
     };
 
     return(
