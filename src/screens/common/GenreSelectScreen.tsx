@@ -7,7 +7,10 @@ import GenreBox from '@components/GenreBox';
 import BackButton from "@components/BackButton";
 import ScreenTitle from "@components/ScreenTitle";
 import NextButton from "@components/NextButton";
+import ConfirmModal from "@components/ConfirmModal";
+import RefreshButton from "@components/RefreshButton";
 import {WORD_GENRES,QUESTION_GENRES,Genre} from "@constants/Genres"; 
+import {getWordCountByGenre} from "@constants/GamePlayFunctions_WordGame";
 
 type RootStackParamList={
   'Select Genre' : {players:number;imposters:number};
@@ -25,6 +28,9 @@ export default function GenreSelect({navigation,route}:GenreSelectScreenProps){
     const genres:Genre[]=gameState.gameMode==="Word" ? WORD_GENRES : QUESTION_GENRES;
 
     const [selected,setSelected]=useState<string[]>(Array.isArray(gameState.genre) && gameState.genre.length>0 ? gameState.genre:genres.map(g=>g.id));
+
+    // Delete this line once connection logic is written 
+    const [comingSoonVisible,setComingSoonVisible]=useState<boolean>(false);
 
     const selectedRef=useRef(selected);
     useEffect(()=>{selectedRef.current=selected;},[selected]);
@@ -53,6 +59,11 @@ export default function GenreSelect({navigation,route}:GenreSelectScreenProps){
       });
     };
 
+    const getCount=(genreId:string):number=>{
+      if(gameState.gameMode == "Word") return getWordCountByGenre(genreId);
+      return 0;
+    };
+
     const rows:Genre[][]=[];
     for(let i=0;i<genres.length;i+=2){
         rows.push(genres.slice(i,i+2));
@@ -63,6 +74,8 @@ export default function GenreSelect({navigation,route}:GenreSelectScreenProps){
     
         {/* Back button*/}
         <BackButton onPress={()=>navigation.goBack()} />
+
+        <RefreshButton onSpinComplete={()=>setComingSoonVisible(true)} />
 
         <View style={styles.container}>
             <ScreenTitle style={styles.heading} label="Select Genres" />
@@ -77,6 +90,7 @@ export default function GenreSelect({navigation,route}:GenreSelectScreenProps){
                                     emoji={genre.emoji}
                                     isSelected={selected.includes(genre.id)}
                                     onPress={()=>toggleGenre(genre.id)}
+                                    count={getCount(genre.id)}
                           />
                         ))}
                     </View>
@@ -91,6 +105,15 @@ export default function GenreSelect({navigation,route}:GenreSelectScreenProps){
             />
 
         </View>
+
+        <ConfirmModal visible={comingSoonVisible}
+                      title="Coming Soon"
+                      body="Fetching updated word count from the server is not yet available."
+                      onDismiss={()=>setComingSoonVisible(false)}
+                      buttons={[
+                        {label:"OK",onPress:()=>setComingSoonVisible(false),style:"default"}
+                      ]}
+        />
       </ImageBackground>
     );
 }

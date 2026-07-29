@@ -53,3 +53,7 @@ export function getRandomHint(hintsString:string):string {
 export function getCategoryLabel(categoryId:string):string{
     return CATEGORY_LABELS[categoryId] ?? categoryId;
 }
+
+export function getWordCountByGenre(categoryId : string):number{
+    return (wordData as WordEntry[]).filter(w=>w.category === categoryId).length;
+}
