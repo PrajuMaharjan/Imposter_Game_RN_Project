@@ -1,9 +1,10 @@
-import {View,Text,StyleSheet,ImageBackground,ScrollView,BackHandler} from 'react-native';
+import {View,Text,StyleSheet,ImageBackground,ScrollView,BackHandler,ActivityIndicator} from 'react-native';
 import {useState, useCallback} from "react";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RouteProp} from "@react-navigation/native";
 import {useGame} from "../../../store/GameContext";
 import { useFocusEffect } from '@react-navigation/native';
+import {useWordFetch} from "../../../hooks/useWordFetch";
 import ScreenTitle from "@components/ScreenTitle";
 import NextButton from "@components/NextButton"; 
 import ConfirmModal from "@components/ConfirmModal";
@@ -44,6 +45,8 @@ export default function ImposterRevealScreen({navigation,route}:ImposterRevealSc
     const [revealed,setRevealed]=useState<boolean>(false);
     const [quitModalVisible,setQuitModalVisible]=useState<boolean>(false);
 
+    const {loading,connectionModalVisible,setConnectionModalVisible,attemptFetch,handleRetry,handleUseOffline}=useWordFetch();
+
     // Disable backwards navigation
     useFocusEffect(
         useCallback(()=>{
@@ -52,11 +55,13 @@ export default function ImposterRevealScreen({navigation,route}:ImposterRevealSc
         },[])
     );
 
-    const handlePlayAgain=():void=>{
-        navigation.reset({
-            index:0,
-            routes:[{name:'Roles'}],
-        });
+    const handlePlayAgain=async():Promise<void>=>{
+        const succeeded=await attemptFetch();
+        if(!succeeded){
+            setConnectionModalVisible(true);
+        }else{
+            navigation.reset({index:0,routes:[{name:'Roles'}] });
+        }
     };
 
     const handleQuitConfirm=():void=>{
@@ -66,6 +71,13 @@ export default function ImposterRevealScreen({navigation,route}:ImposterRevealSc
     return(
         <ImageBackground source={require('../../../assets/Images/HomeImage.png')} style={styles.background} resizeMode='cover'>
             <View style={styles.overlay}>
+            
+            {loading &&(
+                <View style={styles.loadingOverlay}>
+                    <ActivityIndicator size='large' color="white" />
+                </View>
+            )}
+
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
                     <ScreenTitle style={styles.title} label="Game Over" />
                     
@@ -111,6 +123,7 @@ export default function ImposterRevealScreen({navigation,route}:ImposterRevealSc
                 </ScrollView>
             </View>
 
+            {/* Quit Confirm Modal */}
             <ConfirmModal visible={quitModalVisible}
                           title="Are you sure you want to quit?"
                           onDismiss={()=>setQuitModalVisible(false)}
@@ -118,6 +131,16 @@ export default function ImposterRevealScreen({navigation,route}:ImposterRevealSc
                             {label:"Yes",onPress:handleQuitConfirm,style:"destructive"},
                             {label:"No",onPress:()=>setQuitModalVisible(false),style:"cancel"}
                           ]}
+            />
+
+            {/* Connection failure modal */}
+            <ConfirmModal visible={connectionModalVisible}
+                          title="Connection to server failed"
+                          body="Continue in offline mode or retry connection"
+                          buttons={[
+                            {label:"Retry Connection",onPress:()=>handleRetry(()=>navigation.reset({index:0,routes:[{name:'Roles'}] })),style:'default'},
+                            {label:"Play Offline",onPress:()=>handleUseOffline(()=>navigation.reset({index:0,routes:[{name:'Roles'}] })),style:'cancel'},
+                        ]}
             />
         </ImageBackground>
     );
@@ -172,5 +195,12 @@ const styles=StyleSheet.create({
     homeBtn:{
         width:'100%',
         marginBottom:10,
+    },
+    loadingOverlay:{
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor:'rgba(0,0,0,0.5)',
+        justifyContent:'center',
+        alignItems:'center',
+        zIndex:20,
     },
 });

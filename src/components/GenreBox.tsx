@@ -36,7 +36,7 @@ const styles=StyleSheet.create({
         borderColor:'green',
     },
     boxLabel:{
-        fontSize:11,
+        fontSize:20,
         fontWeight:'bold',
         color:'white',
         marginBottom:4,
@@ -50,8 +50,8 @@ const styles=StyleSheet.create({
         marginBottom:6,
     },
     count:{
-        fontSize:10,
-        color:"rgba(255,255,255,0.6)",
+        fontSize:16,
+        color:"white",
         textAlign:"center",
         marginBottom:8,
     },

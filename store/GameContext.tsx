@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext,useContext,useEffect,useState, ReactNode } from "react";
+import {WordEntry} from "../constants/GamePlayFunctions_WordGame";
 
 export type GameMode="Word" | "Question";
 
@@ -22,6 +23,10 @@ export type GameState={
 type GameContextType={
     gameState:GameState;
     setGameState:React.Dispatch<React.SetStateAction<GameState>>;
+    wordQueue:WordEntry[];
+    setWordQueue:(words:WordEntry[])=>void;
+    isOffline:boolean;
+    setIsOffline:(value:boolean)=>void;
 };
 
 type GameProviderProps={
@@ -47,30 +52,36 @@ const DEFAULT_STATE:GameState={
 const GameContext=createContext<GameContextType>({
     gameState:DEFAULT_STATE,
     setGameState:()=>{},
+    wordQueue:[],
+    setWordQueue:()=>{},
+    isOffline:false,
+    setIsOffline:()=>{},
 });
 
 export function GameProvider({children}:GameProviderProps){
     const [gameState,setGameState]=useState<GameState>(DEFAULT_STATE);
+    const [wordQueue,setWordQueue ]=useState<WordEntry[]>([]);
+    const [isOffline,setIsOffline]=useState<boolean>(false);
 
-// Load settings on app start
+    // Load settings on app start
     useEffect(()=>{
         async function loadSettings() {
-        try{
-            const saved=await AsyncStorage.getItem("settings");
-            if(saved){
-                const parsed=JSON.parse(saved);
-                setGameState(prev=>({...prev,
-                                    ...parsed,
-                                    genre:Array.isArray(parsed.genre)? parsed.genre:[],
-                                    playerNames:Array.isArray(parsed.playerNames) ? parsed.playerNames:[],
-                                    imposterNames:[],
-                }));
+            try{
+                const saved=await AsyncStorage.getItem("settings");
+                if(saved){
+                    const parsed=JSON.parse(saved);
+                    setGameState(prev=>({...prev,
+                                        ...parsed,
+                                        genre:Array.isArray(parsed.genre)? parsed.genre:[],
+                                        playerNames:Array.isArray(parsed.playerNames) ? parsed.playerNames:[],
+                                        imposterNames:[],
+                    }));
+                }
+            }catch(e){
+                console.log("Failed to load settings : ",e);
             }
-        }catch(e){
-            console.log("Failed to load settings : ",e);
         }
-    }
-    loadSettings();
+        loadSettings();
     },[]);
 
     // Save settings when changed
@@ -112,7 +123,7 @@ export function GameProvider({children}:GameProviderProps){
         gameState.genre]);
 
     return(
-    <GameContext.Provider value={{gameState,setGameState}}>
+    <GameContext.Provider value={{gameState,setGameState,wordQueue,setWordQueue,isOffline,setIsOffline}}>
         {children}
     </GameContext.Provider>
     );

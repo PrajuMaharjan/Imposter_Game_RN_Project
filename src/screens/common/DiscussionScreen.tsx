@@ -1,12 +1,14 @@
-import {View,StyleSheet,ImageBackground,BackHandler,ScrollView} from 'react-native';
+import {View,StyleSheet,ImageBackground,BackHandler,ScrollView,ActivityIndicator} from 'react-native';
 import { useMemo,useCallback } from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import { useGame } from '@store/GameContext';
+import {useWordFetch} from "../../../hooks/useWordFetch";
 import QuitButton from "@components/QuitButton";
 import ScreenTitle from "@components/ScreenTitle";
 import NextButton from "@components/NextButton";
 import InfoBox from "@components/InfoBox";
+import ConfirmModal from "@components/ConfirmModal";
 
 type RootParamList={
     Roles:undefined;
@@ -24,11 +26,13 @@ export default function DiscussionScreen({navigation}:DiscussionScreenProps){
     const {gameState}=useGame();
     const {playerNames}=gameState;
     
+    const {loading,connectionModalVisible,setConnectionModalVisible,attemptFetch,handleRetry,handleUseOffline}=useWordFetch();
+
     // Disable go back from hardwarebackbuttonpress
     useFocusEffect(
         useCallback(()=>{
-        const backhandler=BackHandler.addEventListener('hardwareBackPress',()=>true);
-        return ()=>backhandler.remove();
+            const backhandler=BackHandler.addEventListener('hardwareBackPress',()=>true);
+            return ()=>backhandler.remove();
     },[]));
     
     const startingPlayer=useMemo(()=>{
@@ -36,12 +40,15 @@ export default function DiscussionScreen({navigation}:DiscussionScreenProps){
         return names[Math.floor(Math.random()*names.length)];
     },[]);
 
-    const handleAgain=():void=>{
-        navigation.reset({
-        index:0,
-        routes:[{name:'Roles'}],
-    });
-};
+    const handleAgain=async():Promise<void>=>{
+        
+        const succeeded=await attemptFetch();
+        if(!succeeded){
+            setConnectionModalVisible(true);
+        }else{
+            navigation.reset({index:0,routes:[{name:'Roles'}]});
+        }
+    };
 
     return(
         <ImageBackground source={require('../../../assets/Images/HomeImage.png')} style={styles.background} resizeMode="cover">
@@ -49,6 +56,12 @@ export default function DiscussionScreen({navigation}:DiscussionScreenProps){
             {/* X button*/}
             <QuitButton onConfirm={()=>navigation.reset({index:0,routes:[{name:"Home"}]})} />
             
+            {loading && (
+                <View style={styles.loadingOverlay}>
+                    <ActivityIndicator size='large' color="white" />
+                </View>
+            )}
+
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
                 <View style={styles.overlay}>
                     <ScreenTitle label="Discussion Time" style={styles.title} />
@@ -70,6 +83,15 @@ export default function DiscussionScreen({navigation}:DiscussionScreenProps){
                     <NextButton label="Play Again" style={styles.againBtn} onPress={handleAgain} />
                 </View>
             </ScrollView>
+
+            <ConfirmModal visible={connectionModalVisible}
+                          title="Connection to server failed"
+                          body="Continue in offline mode or retry connection"
+                          buttons={[
+                            {label:"Retry Connection",onPress:()=>handleRetry(()=>navigation.reset({index:0,routes:[{name:'Roles'}] })),style:'default'},
+                            {label:"Play Offline",onPress:()=>handleUseOffline(()=>navigation.reset({index:0,routes:[{name:'Roles'}] })),style:'cancel'},
+                        ]}
+            />
         </ImageBackground>
     );
 }
@@ -100,5 +122,12 @@ const styles=StyleSheet.create({
     },
     againBtn:{
         marginBottom:80,
+    },
+    loadingOverlay:{
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor:'rgba(0,0,0,0.5)',
+        justifyContent:'center',
+        alignItems:'center',
+        zIndex:20,
     },
 });

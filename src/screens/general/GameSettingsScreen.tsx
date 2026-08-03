@@ -1,13 +1,15 @@
-import {View,Text,StyleSheet,ImageBackground,TouchableOpacity,ScrollView} from 'react-native';
+import {View,Text,StyleSheet,ImageBackground,TouchableOpacity,ScrollView,ActivityIndicator} from 'react-native';
 import {useCallback, useEffect, useState,useRef} from 'react';
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {useGame,GameMode} from '@store/GameContext';
 import { useFocusEffect } from '@react-navigation/native';
+import {useWordFetch} from "../../../hooks/useWordFetch";
 import CounterBox from "@components/CounterBox";
 import GameModeBox from "@components/GameModeBox";
 import BackButton from "@components/BackButton";
 import ScreenTitle from "@components/ScreenTitle";
 import NextButton from "@components/NextButton";
+import ConfirmModal from "@components/ConfirmModal";
 
 type RootStackParamList={
   Home:undefined;
@@ -21,10 +23,12 @@ type GameSettingsScreenProps={
 };
 
 export default function GameSettings({navigation}:GameSettingsScreenProps){
-    const {gameState,setGameState}=useGame();
+    const {gameState,setGameState,setWordQueue,setIsOffline}=useGame();
     const [players,setPlayers]=useState(gameState.players);
     const [imposters,setImposters]=useState(gameState.imposters);
     const [gameMode,setGameMode]=useState<GameMode>(gameState.gameMode);
+
+    const {loading,connectionModalVisible,setConnectionModalVisible,attemptFetch,handleRetry,handleUseOffline}=useWordFetch();
 
     const gameStateRef=useRef(gameState);
     const playersRef=useRef(players);
@@ -60,32 +64,38 @@ export default function GameSettings({navigation}:GameSettingsScreenProps){
         setImposters(players-2);
       }      
     },[players]);
-    
-    const handleStart=():void=>{
+
+    const handleStart=async():Promise<void>=>{
+      const updatedState={players,imposters,gameMode};
       setGameState(prev=>({
         ...prev,
-        players,
-        imposters,
-        gameMode,
+        updatedState
       }));
-      navigation.navigate("Select Genre",{players,imposters});
+
+      const succeeded=await attemptFetch();
+      if(!succeeded){
+        setConnectionModalVisible(true);
+      }else{
+        navigation.navigate("Select Genre",{players,imposters});
+      }
     };
 
     const handleSettingsChange=():void=>{
-    setGameState(prev=>({
-        ...prev,
-        players,
-        imposters,
-        gameMode
-      }));
-
+      setGameState(prev=>({...prev,players,imposters,gameMode}));
       navigation.navigate("Advanced Settings");
-    }
+    };
+      
     return(
       <ImageBackground source={require('../../../assets/Images/HomeImage.png')} style={styles.background} resizeMode="cover">
     
         {/* Back button*/}
         <BackButton onPress={()=>navigation.navigate("Home")} />
+
+        {loading &&(
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color="white" />
+          </View>
+        )}
 
         <ScrollView contentContainerStyle={styles.container}>
           <ScreenTitle label="Game Settings" style={styles.heading} />
@@ -137,6 +147,15 @@ export default function GameSettings({navigation}:GameSettingsScreenProps){
           {/* Start game button*/}
           <NextButton label="NEXT" style={styles.startButton} onPress={handleStart} />
         </ScrollView>
+
+        <ConfirmModal visible={connectionModalVisible}
+                      title="Connection to server failed"
+                      body="Continue in offline mode or retry connection"
+                      buttons={[
+                        {label:"Retry Connection",onPress:()=>handleRetry(()=>navigation.navigate("Select Genre",{players,imposters})),style:'default'},
+                        {label:"Play Offline",onPress:()=>handleUseOffline(()=>navigation.navigate("Select Genre",{players,imposters})),style:'cancel'},
+                      ]}
+          />
       </ImageBackground>
     );
 }
@@ -174,5 +193,12 @@ const styles = StyleSheet.create({
   },
   startButton:{
     marginBottom:50
+  },
+  loadingOverlay:{
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor:'rgba(0,0,0,0.5)',
+    justifyContent:'center',
+    alignItems:'center',
+    zIndex:20,
   },
 });

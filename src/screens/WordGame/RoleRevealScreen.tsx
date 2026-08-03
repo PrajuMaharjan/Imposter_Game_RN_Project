@@ -3,7 +3,7 @@ import {useState,useEffect,useCallback} from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import { useGame } from '@store/GameContext';
-import {getRandomWord,getRandomHint,getCategoryLabel} from '@constants/GamePlayFunctions_WordGame';
+import {popWordFromQueue,getRandomHint,getCategoryLabel} from '@constants/GamePlayFunctions_WordGame';
 import RoleCard from "@components/RoleCard";
 import QuitButton from "@components/QuitButton";
 
@@ -27,7 +27,7 @@ type AssignedRole={
 };
 
 export default function RoleRevealScreen({navigation}:RoleRevealScreenProps){
-    const {gameState,setGameState}=useGame();
+    const {gameState,setGameState,wordQueue,setWordQueue}=useGame();
     const {playerNames,imposters,genre,hintsForImposter,showGenreToImposter,noImposterMode,shakeForNext}=gameState;
     const [currentIndex,setCurrentIndex]=useState<number>(0);
     const [isFlipped,setIsFlipped]=useState<boolean>(false);
@@ -36,8 +36,10 @@ export default function RoleRevealScreen({navigation}:RoleRevealScreenProps){
 
     // Assign roles to all players
     useEffect(()=>{
-        async function assignRoles():Promise<void> {
-            const wordEntry=await getRandomWord(genre);
+        function assignRoles():void {
+
+            const {word:wordEntry,remaining}=popWordFromQueue(wordQueue);
+            setWordQueue(remaining);
 
             const names=playerNames.map(p=>typeof p==="object" ? (p as {name:string}).name:p);
 

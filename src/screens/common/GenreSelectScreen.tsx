@@ -1,4 +1,4 @@
-import {View,StyleSheet,ImageBackground,Alert,ScrollView} from 'react-native';
+import {View,StyleSheet,ImageBackground,Alert,ScrollView,ActivityIndicator} from 'react-native';
 import {useState,useEffect,useRef,useCallback} from 'react';
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {useGame} from "@store/GameContext"
@@ -10,7 +10,7 @@ import NextButton from "@components/NextButton";
 import ConfirmModal from "@components/ConfirmModal";
 import RefreshButton from "@components/RefreshButton";
 import {WORD_GENRES,QUESTION_GENRES,Genre} from "@constants/Genres"; 
-import {getWordCountByGenre} from "@constants/GamePlayFunctions_WordGame";
+import {getWordCountByGenre,fetchGenreCounts,GenreCounts} from "@constants/GamePlayFunctions_WordGame";
 
 type RootStackParamList={
   'Select Genre' : {players:number;imposters:number};
@@ -29,8 +29,12 @@ export default function GenreSelect({navigation,route}:GenreSelectScreenProps){
 
     const [selected,setSelected]=useState<string[]>(Array.isArray(gameState.genre) && gameState.genre.length>0 ? gameState.genre:genres.map(g=>g.id));
 
-    // Delete this line once connection logic is written 
-    const [comingSoonVisible,setComingSoonVisible]=useState<boolean>(false);
+    const [genreCounts,setGenreCounts]=useState<GenreCounts>(
+      Object.fromEntries(genres.map(g=>[g.id,getWordCountByGenre(g.id)]))
+    );
+
+    const [fetchingCounts,setFetchingCounts]=useState<boolean>(false);
+    const [connectionModalVisible,setConnectionModalVisible]=useState<boolean>(false);
 
     const selectedRef=useRef(selected);
     useEffect(()=>{selectedRef.current=selected;},[selected]);
@@ -43,7 +47,7 @@ export default function GenreSelect({navigation,route}:GenreSelectScreenProps){
       },[])
     );
 
-    const toggleGenre=(id:string)=>{
+    const toggleGenre=(id:string):void=>{
         setSelected(prev=>prev.includes(id)?prev.filter(g=>g!==id):[...prev,id]);
     };
 
@@ -52,21 +56,33 @@ export default function GenreSelect({navigation,route}:GenreSelectScreenProps){
             Alert.alert('No genre selected.','Please select at least one genre to continue');
             return;
         }
-    selectedRef.current=selected;
-    setGameState(prev=>({...prev,genre:selected}));
-    navigation.navigate('Names',{players:route.params?.players,
-                                 imposters:route.params?.imposters      
-      });
+    
+        selectedRef.current=selected;
+        setGameState(prev=>({...prev,genre:selected}));
+        navigation.navigate('Names',{ players:route.params?.players,
+                                      imposters:route.params?.imposters      
+        });
+    };
+
+    const handleRefreshComplete=async():Promise<void>=>{
+      setFetchingCounts(true);
+      const {counts,source}=await fetchGenreCounts();
+      setFetchingCounts(false);
+
+      if(source === "local"){
+        setConnectionModalVisible(true);
+      }else{
+        setGenreCounts(counts);
+      }
     };
 
     const getCount=(genreId:string):number=>{
-      if(gameState.gameMode == "Word") return getWordCountByGenre(genreId);
-      return 0;
+      return genreCounts[genreId] ?? 0;
     };
 
     const rows:Genre[][]=[];
-    for(let i=0;i<genres.length;i+=2){
-        rows.push(genres.slice(i,i+2));
+    for (let i=0;i<genres.length;i+=2){
+      rows.push(genres.slice(i,i+1));
     }
 
     return(
@@ -75,7 +91,13 @@ export default function GenreSelect({navigation,route}:GenreSelectScreenProps){
         {/* Back button*/}
         <BackButton onPress={()=>navigation.goBack()} />
 
-        <RefreshButton onSpinComplete={()=>setComingSoonVisible(true)} />
+        <RefreshButton onSpinComplete={handleRefreshComplete} />
+
+        {fetchingCounts && (
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color="white" />
+          </View>
+        )}
 
         <View style={styles.container}>
             <ScreenTitle style={styles.heading} label="Select Genres" />
@@ -106,12 +128,14 @@ export default function GenreSelect({navigation,route}:GenreSelectScreenProps){
 
         </View>
 
-        <ConfirmModal visible={comingSoonVisible}
-                      title="Coming Soon"
-                      body="Fetching updated word count from the server is not yet available."
-                      onDismiss={()=>setComingSoonVisible(false)}
+        {/* Modal for connection failed scenario */}
+        <ConfirmModal visible={connectionModalVisible}
+                      title="Connection to server failed"
+                      body="Could not fetch updated word count from the server. Please check your connection and try again"
+                      onDismiss={()=>setConnectionModalVisible(false)}
                       buttons={[
-                        {label:"OK",onPress:()=>setComingSoonVisible(false),style:"default"}
+                        {label:'Try Again',onPress:async()=>{setConnectionModalVisible(false); await handleRefreshComplete(); },style:"default"},
+                        {label:"OK",onPress:()=>setConnectionModalVisible(false),style:"cancel"}
                       ]}
         />
       </ImageBackground>
@@ -144,5 +168,12 @@ const styles = StyleSheet.create({
   startButton:{
     borderRadius:8,
     marginBottom:50,
+  },
+  loadingOverlay:{
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor:'rgba(0,0,0,0.5)',
+    justifyContent:'center',
+    alignItems:'center',
+    zIndex:20,
   },
 });
