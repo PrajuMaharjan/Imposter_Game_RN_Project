@@ -39,6 +39,16 @@ export default function GenreSelect({navigation,route}:GenreSelectScreenProps){
     const selectedRef=useRef(selected);
     useEffect(()=>{selectedRef.current=selected;},[selected]);
 
+    useEffect(()=>{
+      async function loadCounts(){
+        const {counts,source}=await fetchGenreCounts();
+        if(source === "remote"){
+            setGenreCounts(counts);
+        }
+      }
+      loadCounts();
+    },[]);
+
     useFocusEffect(
       useCallback(()=>{
         return ()=>{
@@ -82,7 +92,7 @@ export default function GenreSelect({navigation,route}:GenreSelectScreenProps){
 
     const rows:Genre[][]=[];
     for (let i=0;i<genres.length;i+=2){
-      rows.push(genres.slice(i,i+1));
+      rows.push(genres.slice(i,i+2));
     }
 
     return(
