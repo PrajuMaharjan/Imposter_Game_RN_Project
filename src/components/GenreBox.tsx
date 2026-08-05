@@ -14,9 +14,10 @@ export default function GenreBox({label,emoji,isSelected,onPress,count}:GenreBox
         <TouchableOpacity style={[styles.box,isSelected && styles.boxSelected]} onPress={onPress}>
             <Text style={[styles.emoji]}>{emoji}</Text>
             <Text style={[styles.boxLabel,isSelected && styles.boxLabelSelected]}>{label}</Text>
-            <Text style={styles.count}>
-                {count !== undefined ? `${count} words` : `0 words`}
-            </Text>
+            
+            {count !== undefined && (
+                <Text style={styles.count}>{count} words </Text>
+            )}
         </TouchableOpacity>
     );
 }

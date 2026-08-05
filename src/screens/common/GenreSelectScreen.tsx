@@ -34,6 +34,7 @@ export default function GenreSelect({navigation,route}:GenreSelectScreenProps){
     );
 
     const [fetchingCounts,setFetchingCounts]=useState<boolean>(false);
+    const [countsLoading,setCountsLoading]=useState<boolean>(true);
     const [connectionModalVisible,setConnectionModalVisible]=useState<boolean>(false);
 
     const selectedRef=useRef(selected);
@@ -45,6 +46,7 @@ export default function GenreSelect({navigation,route}:GenreSelectScreenProps){
         if(source === "remote"){
             setGenreCounts(counts);
         }
+        setCountsLoading(false);
       }
       loadCounts();
     },[]);
@@ -86,7 +88,8 @@ export default function GenreSelect({navigation,route}:GenreSelectScreenProps){
       }
     };
 
-    const getCount=(genreId:string):number=>{
+    const getCount=(genreId:string):number | undefined=>{
+      if(countsLoading) return undefined;
       return genreCounts[genreId] ?? 0;
     };
 
