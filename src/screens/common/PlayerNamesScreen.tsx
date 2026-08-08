@@ -1,18 +1,19 @@
-import {View,Text,StyleSheet,ImageBackground,ScrollView,Alert} from 'react-native';
+import {View,StyleSheet,ImageBackground,ScrollView,Alert} from 'react-native';
 import {useEffect, useState,useCallback,useRef} from 'react';
-import {useGame} from '../../../store/GameContext';
+import {useGame} from '@store/GameContext';
 import { useFocusEffect } from '@react-navigation/native';
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {RouteProp} from "@react-navigation/native";
-import PlayerBar from "../../components/PlayerBar";
-import BackButton from "../../components/BackButton";
-import ScreenTitle from "../../components/ScreenTitle";
-import NextButton from "../../components/NextButton";
-import CounterBox from "../../components/CounterBox";
+import PlayerBar from "@components/PlayerBar";
+import BackButton from "@components/BackButton";
+import ScreenTitle from "@components/ScreenTitle";
+import NextButton from "@components/NextButton";
+import CounterBox from "@components/CounterBox";
 
 type RootParamList={
     Names : {players:number; imposters:number};
     Roles:undefined;
+    "All Players":undefined;
 };
 
 type PlayerEntry={
@@ -102,54 +103,54 @@ export default function EnterNames({navigation,route}:Props){
             imposters,
             playerNames:players.map(p=>p.name),
         }));
-        navigation.navigate('Roles');
+        navigation.navigate(gameState.gameMode==='Word' ? "Roles" : "All Players");
     };
 
     return(
-<ImageBackground source={require('../../../assets/Images/HomeImage.png')} style={styles.background} resizeMode="cover">
+        <ImageBackground source={require('../../../assets/Images/HomeImage.png')} style={styles.background} resizeMode="cover">
     
-    {/* Back button*/}
-    <BackButton onPress={()=>navigation.goBack()} />
+            {/* Back button*/}
+            <BackButton onPress={()=>navigation.goBack()} />
 
-    <View style={styles.container}>
-        <ScreenTitle label="Player List" style={styles.heading} />
-        <View style={styles.countersRow}>
-                <CounterBox emoji="👥"
-                            label="Players"
-                            value={players.length}
-                            onDecrement={()=>removePlayer(players[players.length-1]?.id)}
-                            onIncrement={addPlayer}
-                            style={styles.counterBoxCompact}
-                />
+            <View style={styles.container}>
+                <ScreenTitle label="Player List" style={styles.heading} />
+                <View style={styles.countersRow}>
+                        <CounterBox emoji="👥"
+                                    label="Players"
+                                    value={players.length}
+                                    onDecrement={()=>removePlayer(players[players.length-1]?.id)}
+                                    onIncrement={addPlayer}
+                                    style={styles.counterBoxCompact}
+                        />
+                        
+                        <CounterBox emoji="🔪"
+                                    label="Imposters"
+                                    value={imposters}
+                                    onDecrement={()=>setImposters(i=>Math.max(1,i-1))}
+                                    onIncrement={()=>setImposters(i=>Math.min(players.length-2,i+1))}
+                                    style={styles.counterBoxCompact}
+                        />
+                        </View>
                 
-                <CounterBox emoji="🔪"
-                            label="Imposters"
-                            value={imposters}
-                            onDecrement={()=>setImposters(i=>Math.max(1,i-1))}
-                            onIncrement={()=>setImposters(i=>Math.min(players.length-2,i+1))}
-                            style={styles.counterBoxCompact}
-                />
-                </View>
-        
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-            {players.map((player,index)=>(
-                   <PlayerBar key={player.id.toString()}
-                              index={index}
-                              id={player.id}
-                              name={player.name}
-                              isEditing={editingId===player.id}
-                              onPress={()=>setEditingId(player.id)}
-                              onChangeName={(text)=>editName(player.id,text)}
-                              onBlur={()=>setEditingId(null)}
-                              onRemove={()=>removePlayer(player.id)}
-                    />
-            ))}
-        </ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+                    {players.map((player,index)=>(
+                        <PlayerBar key={player.id.toString()}
+                                    index={index}
+                                    id={player.id}
+                                    name={player.name}
+                                    isEditing={editingId===player.id}
+                                    onPress={()=>setEditingId(player.id)}
+                                    onChangeName={(text)=>editName(player.id,text)}
+                                    onBlur={()=>setEditingId(null)}
+                                    onRemove={()=>removePlayer(player.id)}
+                            />
+                    ))}
+                </ScrollView>
 
-            {/* Start game button*/}
-        <NextButton label="START GAME" style={styles.startButton} onPress={handlePlay} />
-    </View>
-</ImageBackground>
+                    {/* Start game button*/}
+                <NextButton label="START GAME" style={styles.startButton} onPress={handlePlay} />
+            </View>
+        </ImageBackground>
     );
 }
 
@@ -159,7 +160,7 @@ const styles=StyleSheet.create({
     },
 
     container:{
-       flex: 1,
+        flex: 1,
         paddingTop:40,
         padding:20,
     },

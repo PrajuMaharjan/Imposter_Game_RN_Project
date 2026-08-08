@@ -6,13 +6,18 @@ type GenreBoxProps={
     emoji:string;
     isSelected:boolean;
     onPress:()=>void;
+    count?:number;
 };
 
-export default function GenreBox({label,emoji,isSelected,onPress}:GenreBoxProps){
+export default function GenreBox({label,emoji,isSelected,onPress,count}:GenreBoxProps){
     return(
         <TouchableOpacity style={[styles.box,isSelected && styles.boxSelected]} onPress={onPress}>
             <Text style={[styles.emoji]}>{emoji}</Text>
             <Text style={[styles.boxLabel,isSelected && styles.boxLabelSelected]}>{label}</Text>
+            
+            {count !== undefined && (
+                <Text style={styles.count}>{count} words </Text>
+            )}
         </TouchableOpacity>
     );
 }
@@ -32,10 +37,10 @@ const styles=StyleSheet.create({
         borderColor:'green',
     },
     boxLabel:{
-        fontSize:11,
+        fontSize:20,
         fontWeight:'bold',
         color:'white',
-        marginBottom:12,
+        marginBottom:4,
         textAlign:'center',
     },
     boxLabelSelected:{
@@ -44,5 +49,11 @@ const styles=StyleSheet.create({
     emoji:{
         fontSize:30,
         marginBottom:6,
+    },
+    count:{
+        fontSize:16,
+        color:"white",
+        textAlign:"center",
+        marginBottom:8,
     },
 });

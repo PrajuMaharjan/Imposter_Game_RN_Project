@@ -39,3 +39,12 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Database configuration
+.env
+
+# Full worddata
+assets/Datasets/WordData_Full.json
+
+# Service account key
+serviceAccountKey.json
