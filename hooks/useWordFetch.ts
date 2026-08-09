@@ -12,7 +12,7 @@ type UseWordFetchResult={
 };
 
 export function useWordFetch():UseWordFetchResult{
-    const {gameState,setGameState,setWordQueue,setIsOffline}=useGame();
+    const {gameState,wordQueue,setWordQueue,setIsOffline}=useGame();
     const [loading,setLoading]=useState<boolean>(false);
     const [connectionModalVisible,setConnectionModalVisible]=useState<boolean>(false);
 
@@ -33,7 +33,7 @@ export function useWordFetch():UseWordFetchResult{
     };
 
     const checkQueueOrFetch=async():Promise<boolean>=>{
-        if(setWordQueue.length>0) return true;
+        if(wordQueue.length>0) return true;
         return await attemptFetch();
     };
     
